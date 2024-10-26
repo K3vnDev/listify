@@ -13,7 +13,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body className='p-6 flex flex-col gap-12'>{children}</body>
+      <body className='p-6 flex flex-col gap-10 max-w-4xl mx-auto'>{children}</body>
     </html>
   )
 }
