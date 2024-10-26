@@ -1,10 +1,12 @@
-import { TASKS_MOCK } from '@/mocks'
-import type { Task } from '@/types.d'
+import { useStore } from '@/store/useStore'
+import { Task } from '@components/tasks/Task'
 import { useParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 
 export const TasksSection = () => {
-  const [tasks, setTasks] = useState<Task | null>(null)
+  const setTasks = useStore(s => s.setTasks)
+  const tasks = useStore(s => s.tasks)
+
   const { listId } = useParams()
 
   const handleError = () => {}
@@ -14,8 +16,7 @@ export const TasksSection = () => {
       try {
         const res = await fetch(`/api/tasks?list-id=${listId}`)
         if (!res.ok) handleError()
-
-        const data = await res.json()
+        const { data } = await res.json()
         setTasks(data)
       } catch {
         handleError()
@@ -23,14 +24,12 @@ export const TasksSection = () => {
     })()
   }, [])
 
-  if (tasks === null) return
+  if (tasks === null || tasks.length === 0) return null
 
   return (
     <ul className='flex flex-col gap-2'>
-      {TASKS_MOCK.map(({ text }, i) => (
-        <li key={i} className='px-2 py-3 bg-[#CFCFCF] rounded-lg'>
-          <span>{text}</span>
-        </li>
+      {tasks.map(task => (
+        <Task key={task.id} {...task} />
       ))}
     </ul>
   )

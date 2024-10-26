@@ -11,9 +11,11 @@ interface Props {
 
 export const Lists = ({ lists }: Props) => {
   const setLists = useStore(s => s.setLists)
+  const setTasks = useStore(s => s.setTasks)
 
   useEffect(() => {
     setLists(lists)
+    setTasks(null)
   }, [])
 
   return (

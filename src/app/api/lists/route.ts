@@ -1,15 +1,23 @@
+import { listIdMiddleware } from '@api/listIdMiddleware'
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
 import { type NextRequest, NextResponse } from 'next/server'
 
-export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url)
-  const id = searchParams.get('id')
+export async function GET(req: NextRequest) {
+  return listIdMiddleware(req, async (_, listId) => {
+    const supabase = createRouteHandlerClient({ cookies })
 
-  const supabase = createRouteHandlerClient({ cookies })
+    const { data, error, status } = await supabase
+      .from('lists')
+      .select('id, name, color')
+      .eq('id', listId)
 
-  const data = await supabase.from('lists').select('id, name, color').eq('id', id)
-  if (data.error) NextResponse.json({ success: false }, { status: data.status })
+    if (error) return NextResponse.json({ success: false }, { status })
 
-  return NextResponse.json({ data: data.data }, { status: 200 })
+    if (data.length === 0)
+      return NextResponse.json({ success: false, message: 'List not found' }, { status: 404 })
+
+    const [list] = data
+    return NextResponse.json({ data: list }, { status: 200 })
+  })
 }

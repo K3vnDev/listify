@@ -18,13 +18,11 @@ export default function ListView() {
 
   const fetchList = async () => {
     try {
-      const res = await fetch(`/api/lists?id=${listId}`)
+      const res = await fetch(`/api/lists?list-id=${listId}`)
       if (!res.ok) return handleError()
 
       const { data } = await res.json()
-      if (data.length === 0) return handleError()
-      const [list] = data
-      setList(list)
+      setList(data)
     } catch {
       handleError()
     }
@@ -41,7 +39,7 @@ export default function ListView() {
     setList(list)
   }, [])
 
-  if (list === null) return
+  if (list === null) return null
   const { name, color } = list
 
   return (

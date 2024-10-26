@@ -1,9 +1,9 @@
 'use client'
 
-import type { List } from '@/types.d'
+import type { List as ListType } from '@/types.d'
 import Link from 'next/link'
 
-export const Item = ({ id, name, color }: List) => {
+export const Item = ({ id, name, color }: ListType) => {
   const handleClick = () => {}
 
   return (
