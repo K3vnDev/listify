@@ -1,4 +1,3 @@
-import { useTasks } from '@/hooks/useTasks'
 import { useStore } from '@/store/useStore'
 import type { Task as TaskType } from '@/types.d'
 import { Checkbox } from '@components/tasks/Checkbox'
@@ -10,7 +9,6 @@ export const Task = ({ id, text, done }: TaskType) => {
   const editingTask = useStore(s => s.editingTask)
   useEffect(() => setIsEditing(editingTask === id), [editingTask])
 
-  const { setDone, setText } = useTasks(id)
   const setEditingTask = useStore(s => s.setEditingTask)
   const elementRef = useRef(null)
 
@@ -30,15 +28,15 @@ export const Task = ({ id, text, done }: TaskType) => {
       className={`task flex items-center justify-between pr-3 bg-[#cfcfcf] ${background} hover:brightness-[102%] rounded-lg gap-4 ${outline} cursor-pointer`}
       ref={elementRef}
     >
-      <TaskContext.Provider value={{ id, isEditing, text, done, elementRef }}>
-        <Text value={text} setValue={setText} />
-        {!isEditing && <Checkbox checked={done} setChecked={setDone} />}
+      <TaskContext.Provider value={{ taskId: id, isEditing, text, done, elementRef }}>
+        <Text value={text} />
+        {!isEditing && <Checkbox checked={done} />}
       </TaskContext.Provider>
     </li>
   )
 }
 
 export const TaskContext = createContext({
-  ...{ id: '', isEditing: false, text: '', done: false },
+  ...{ taskId: '', isEditing: false, text: '', done: false },
   elementRef: { current: null } as React.MutableRefObject<null>
 })

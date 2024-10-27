@@ -4,8 +4,8 @@ import { cookies } from 'next/headers'
 import { type NextRequest, NextResponse } from 'next/server'
 
 // Get All Tasks
-export async function GET(req: NextRequest) {
-  return listIdMiddleware(req, async (_, listId) => {
+export async function GET(request: NextRequest) {
+  return listIdMiddleware(request, async listId => {
     const supabase = createRouteHandlerClient({ cookies })
 
     const { data, error, status } = await supabase
@@ -18,44 +18,36 @@ export async function GET(req: NextRequest) {
   })
 }
 
-const TARGETS = ['done', 'text']
-type RequestJSON = { target?: string; value?: string | boolean; taskId?: string }
+const TARGETS = ['done', 'text'] as const
 
-// Update Task
-export async function PATCH(req: NextRequest) {
-  return listIdMiddleware(req, async (request, listId) => {
+interface RequestJSON {
+  target?: (typeof TARGETS)[number]
+  value?: string | boolean
+  taskId?: string
+}
+
+// Update task row (text or done column)
+export async function PATCH(request: NextRequest) {
+  return listIdMiddleware(request, async listId => {
     const { target, value, taskId } = (await request.json()) as RequestJSON
 
-    if (!TARGETS.includes(target ?? '') || value === undefined || typeof taskId !== 'string')
+    if (!target || !TARGETS.includes(target) || value === undefined || typeof taskId !== 'string')
       return NextResponse.json(
         { success: false, message: 'Some values are missing or invalid' },
         { status: 400 }
       )
-
     const supabase = createRouteHandlerClient({ cookies })
 
-    switch (target) {
-      case 'done': {
-        const { error, status } = await supabase
-          .from('tasks')
-          .update({ done: value })
-          .eq('list_id', listId)
-          .eq('id', taskId)
+    const updateObj = {}
+    ;(updateObj as any)[target] = value
 
-        if (error) return NextResponse.json({ success: false }, { status })
-        return NextResponse.json({ success: true }, { status: 200 })
-      }
+    const { error, status } = await supabase
+      .from('tasks')
+      .update(updateObj)
+      .eq('list_id', listId)
+      .eq('id', taskId)
 
-      case 'text': {
-        const { error, status } = await supabase
-          .from('tasks')
-          .update({ text: value })
-          .eq('list_id', listId)
-          .eq('id', taskId)
-
-        if (error) return NextResponse.json({ success: false }, { status })
-        return NextResponse.json({ success: true }, { status: 200 })
-      }
-    }
+    if (error) return NextResponse.json({ success: false }, { status })
+    return NextResponse.json({ success: true }, { status: 200 })
   })
 }

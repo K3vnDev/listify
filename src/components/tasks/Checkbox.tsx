@@ -1,14 +1,32 @@
+import { usePatch } from '@/hooks/usePatch'
 import { CheckIcon } from '@/icons'
+import { useStore } from '@/store/useStore'
+import { TaskContext } from '@components/tasks/Task'
+import { useContext } from 'react'
 
 interface Props {
   checked: boolean
-  setChecked: (newValue: boolean) => void
 }
 
-export const Checkbox = ({ checked, setChecked }: Props) => {
+export const Checkbox = ({ checked }: Props) => {
+  const { taskId } = useContext(TaskContext)
+  const setTaskDone = useStore(s => s.setTaskDone)
+
+  const { trigger } = usePatch({
+    taskId,
+    prevValue: checked,
+    target: 'done',
+    onError: prevValue => {
+      setTaskDone(prevValue, taskId)
+    }
+  })
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked(e.target.checked)
+    const { checked } = e.target
+    setTaskDone(checked, taskId)
+    trigger(checked)
   }
+
   const outline = checked ? 'outline-[#aaa]' : 'outline-[#bbb]'
 
   return (

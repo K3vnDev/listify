@@ -1,3 +1,4 @@
+import { usePatch } from '@/hooks/usePatch'
 import { useStore } from '@/store/useStore'
 import { getElementRef } from '@/utils/getElementRef'
 import { TaskContext } from '@components/tasks/Task'
@@ -5,13 +6,22 @@ import { useContext, useEffect, useRef } from 'react'
 
 interface Props {
   value: string
-  setValue: (newValue: string) => void
 }
 
-export const Text = ({ value, setValue }: Props) => {
-  const { isEditing, elementRef, done } = useContext(TaskContext)
+export const Text = ({ value }: Props) => {
+  const { taskId, isEditing, elementRef, done } = useContext(TaskContext)
   const setEditingTask = useStore(s => s.setEditingTask)
+  const setTaskText = useStore(s => s.setTaskText)
   const textareaRef = useRef(null)
+
+  const { trigger } = usePatch({
+    taskId,
+    prevValue: value,
+    target: 'text',
+    onError: prevValue => {
+      setTaskText(prevValue, taskId)
+    }
+  })
 
   useEffect(() => {
     if (isEditing) {
@@ -39,13 +49,16 @@ export const Text = ({ value, setValue }: Props) => {
   }, [elementRef.current, isEditing])
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setValue(e.target.value)
+    const { value } = e.target
+    setTaskText(value, taskId)
+    trigger(value)
   }
+
+  const lineThrough = done ? 'line-through' : ''
 
   return !isEditing ? (
     <span
-      className='w-full text-black py-4 pl-3 cursor-pointer leading-[1.375rem] text-pretty'
-      style={{ textDecoration: done ? 'line-through' : undefined }}
+      className={`w-full text-black my-4 pl-3 cursor-pointer leading-[1.375rem] min-h-[1.375rem] text-pretty ${lineThrough}`}
     >
       {value}
     </span>
