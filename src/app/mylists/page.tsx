@@ -1,4 +1,4 @@
-import { AddNewListButton } from '@/components/lists/AddNewListButton'
+import { CreateListButton } from '@/components/lists/CreateListButton'
 import { ListsSection } from '@/components/lists/ListsSection'
 import { GridIcon } from '@/icons'
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
@@ -22,7 +22,7 @@ export default async function MyLists() {
       <header className='flex justify-between items-center'>
         <div className={`flex gap-5 font-medium text-lg ${poppins.className}`}>
           <span className='text-white'>My Lists</span>
-          <AddNewListButton />
+          <CreateListButton />
         </div>
         <GridIcon className='size-8 fill-gray-500' />
       </header>

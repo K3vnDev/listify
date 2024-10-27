@@ -4,8 +4,8 @@ import { cookies } from 'next/headers'
 import { type NextRequest, NextResponse } from 'next/server'
 
 // Get All Tasks
-export async function GET(request: NextRequest) {
-  return listIdMiddleware(request, async listId => {
+export const GET = async (request: NextRequest) =>
+  listIdMiddleware(request, async listId => {
     const supabase = createRouteHandlerClient({ cookies })
 
     const { data, error, status } = await supabase
@@ -16,19 +16,10 @@ export async function GET(request: NextRequest) {
     if (error) return NextResponse.json({ success: false }, { status })
     return NextResponse.json({ success: true, data }, { status: 200 })
   })
-}
-
-const TARGETS = ['done', 'text'] as const
-
-interface RequestJSON {
-  target?: (typeof TARGETS)[number]
-  value?: string | boolean
-  taskId?: string
-}
 
 // Update task row (text or done column)
-export async function PATCH(request: NextRequest) {
-  return listIdMiddleware(request, async listId => {
+export const PATCH = async (request: NextRequest) =>
+  listIdMiddleware(request, async listId => {
     const { target, value, taskId } = (await request.json()) as RequestJSON
 
     if (!target || !TARGETS.includes(target) || value === undefined || typeof taskId !== 'string')
@@ -50,4 +41,25 @@ export async function PATCH(request: NextRequest) {
     if (error) return NextResponse.json({ success: false }, { status })
     return NextResponse.json({ success: true }, { status: 200 })
   })
+
+const TARGETS = ['done', 'text'] as const
+
+interface RequestJSON {
+  target?: (typeof TARGETS)[number]
+  value?: string | boolean
+  taskId?: string
 }
+
+// Create new task and get its id
+export const POST = (request: NextRequest) =>
+  listIdMiddleware(request, async listId => {
+    const supabase = createRouteHandlerClient({ cookies })
+
+    const { data, error, status } = await supabase
+      .from('tasks')
+      .insert([{ list_id: listId }])
+      .select('id')
+
+    if (error) return NextResponse.json({ success: false }, { status })
+    return NextResponse.json({ success: true, data }, { status: 200 })
+  })

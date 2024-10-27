@@ -35,13 +35,21 @@ export const Text = ({ value }: Props) => {
       const target = e.target as HTMLElement
 
       const taskElement = getElementRef(elementRef)
-      const clickedOnThisElement = taskElement.contains(target)
 
-      const clickedOnATaskElement =
-        target.closest('.task') && !target.closest('input[type=checkbox]')
+      const clickedOn = {
+        thisTask: taskElement.contains(target),
+        anotherTask: !!target.closest('.task'),
+        taskCheckbox: !!target.closest('.task input[type=checkbox]'),
+        createTaskButton: !!target.closest('#create-task-btn')
+      }
 
-      if (clickedOnThisElement) getElementRef(textareaRef).focus()
-      else if (!clickedOnATaskElement) setEditingTask(null)
+      if (clickedOn.thisTask) {
+        getElementRef(textareaRef).focus()
+        return
+      }
+
+      if ((!clickedOn.anotherTask && !clickedOn.createTaskButton) || clickedOn.taskCheckbox)
+        setEditingTask(null)
     }
 
     document.addEventListener('click', handleClick)

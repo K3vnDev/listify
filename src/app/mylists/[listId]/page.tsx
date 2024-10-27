@@ -1,10 +1,11 @@
 'use client'
 
+import { AddButton } from '@/components/AddButton'
+import { CreateTaskButton } from '@/components/tasks/CreateTaskButton'
 import { TasksSection } from '@/components/tasks/TasksSection'
 import { ArrowDownIcon } from '@/icons'
 import { useStore } from '@/store/useStore'
 import type { List } from '@/types.d'
-import { AddNewButton } from '@components/AddNewButton'
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
@@ -50,7 +51,7 @@ export default function ListView() {
       <header className='flex w-full justify-between gap-2'>
         <h3 className='font-bold text-2xl text-nowrap text-ellipsis overflow-hidden'>{name}</h3>
         <div className='flex items-center gap-2'>
-          <AddNewButton onClick={() => {}} />
+          <CreateTaskButton />
           <ArrowDownIcon className='size-8 text-slate-600' />
         </div>
       </header>
