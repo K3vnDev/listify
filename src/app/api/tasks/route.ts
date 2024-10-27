@@ -18,15 +18,15 @@ export async function GET(req: NextRequest) {
   })
 }
 
-const TARGETS = ['text', 'done']
-type RequestJSON = { target?: string; value?: boolean; taskId?: string }
+const TARGETS = ['done', 'text']
+type RequestJSON = { target?: string; value?: string | boolean; taskId?: string }
 
 // Update Task
 export async function PATCH(req: NextRequest) {
   return listIdMiddleware(req, async (request, listId) => {
     const { target, value, taskId } = (await request.json()) as RequestJSON
 
-    if (!TARGETS.includes(target ?? '') || typeof value !== 'boolean' || typeof taskId !== 'string')
+    if (!TARGETS.includes(target ?? '') || value === undefined || typeof taskId !== 'string')
       return NextResponse.json(
         { success: false, message: 'Some values are missing or invalid' },
         { status: 400 }
@@ -39,6 +39,17 @@ export async function PATCH(req: NextRequest) {
         const { error, status } = await supabase
           .from('tasks')
           .update({ done: value })
+          .eq('list_id', listId)
+          .eq('id', taskId)
+
+        if (error) return NextResponse.json({ success: false }, { status })
+        return NextResponse.json({ success: true }, { status: 200 })
+      }
+
+      case 'text': {
+        const { error, status } = await supabase
+          .from('tasks')
+          .update({ text: value })
           .eq('list_id', listId)
           .eq('id', taskId)
 

@@ -2,15 +2,19 @@ import { CheckIcon } from '@/icons'
 
 interface Props {
   checked: boolean
-  setChecked: (value: boolean) => void
+  setChecked: (newValue: boolean) => void
 }
 
 export const Checkbox = ({ checked, setChecked }: Props) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(e.target.checked)
   }
+  const outline = checked ? 'outline-[#aaa]' : 'outline-[#bbb]'
+
   return (
-    <div className='size-8 outline outline-4 -outline-offset-4 outline-[#bbb] rounded relative active:scale-110 transition'>
+    <div
+      className={`size-8 min-w-8 outline outline-4 -outline-offset-4 ${outline} rounded relative active:scale-110 transition`}
+    >
       <input
         type='checkbox'
         checked={checked}

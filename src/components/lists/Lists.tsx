@@ -1,5 +1,6 @@
 'use client'
 
+import { useReset } from '@/hooks/useReset'
 import { useStore } from '@/store/useStore'
 import type { List } from '@/types.d'
 import { useEffect } from 'react'
@@ -11,11 +12,11 @@ interface Props {
 
 export const Lists = ({ lists }: Props) => {
   const setLists = useStore(s => s.setLists)
-  const setTasks = useStore(s => s.setTasks)
+  const { reset } = useReset()
 
   useEffect(() => {
     setLists(lists)
-    setTasks(null)
+    reset()
   }, [])
 
   return (
