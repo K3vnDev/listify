@@ -1,9 +1,10 @@
-import { UNSAVED_TASK_ID } from '@/consts'
+import { useDeleteTask } from '@/hooks/useDeleteTask'
+import { useUnSavedTask } from '@/hooks/useUnSavedTask'
 import { useStore } from '@/store/useStore'
 import type { Task as TaskType } from '@/types.d'
 import { Checkbox } from '@components/tasks/Checkbox'
+import { DeleteTaskButton } from '@components/tasks/DeleteTaskButton'
 import { Text } from '@components/tasks/Text'
-import { useParams } from 'next/navigation'
 import { createContext, useEffect, useRef, useState } from 'react'
 
 export const Task = ({ id, text, done }: TaskType) => {
@@ -12,30 +13,15 @@ export const Task = ({ id, text, done }: TaskType) => {
   const setEditingTask = useStore(s => s.setEditingTask)
   useEffect(() => setIsEditing(editingTask === id), [editingTask])
 
-  const setUnSavedTaskId = useStore(s => s.setUnSavedTaskId)
-  const { listId } = useParams()
-  const isFirstRender = useRef(true)
-
+  const { deleteTask } = useDeleteTask(id, text, done)
   const elementRef = useRef(null)
-
-  const saveUnsavedTask = async () => {
-    const res = await fetch(`/api/tasks?list-id=${listId}`, { method: 'POST' })
-    const { success, data } = await res.json()
-    const [{ id }] = data
-    setUnSavedTaskId(id)
-    setEditingTask(id)
-  }
-
-  useEffect(() => {
-    if (id === UNSAVED_TASK_ID && isFirstRender.current) {
-      isFirstRender.current = false
-      saveUnsavedTask()
-    }
-  }, [])
+  useUnSavedTask(id)
 
   const handleClick = (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
     const clickedCheckbox = Boolean((e.target as HTMLElement).closest('input[type=checkbox]'))
     if (!clickedCheckbox) setEditingTask(id)
+
+    if (e.shiftKey && !isEditing) deleteTask()
   }
 
   const outline = isEditing ? '-outline-offset-2 outline-dashed outline-2 outline-[#DAA4A4]' : ''
@@ -52,7 +38,12 @@ export const Task = ({ id, text, done }: TaskType) => {
     >
       <TaskContext.Provider value={{ taskId: id, isEditing, text, done, elementRef }}>
         <Text value={text} />
-        {!isEditing && <Checkbox checked={done} />}
+        {
+          // biome-ignore format: <>
+          isEditing 
+            ? <DeleteTaskButton /> 
+            : <Checkbox checked={done} />
+        }
       </TaskContext.Provider>
     </li>
   )

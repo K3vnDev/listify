@@ -1,6 +1,6 @@
 'use client'
 
-import { AddButton } from '@/components/AddButton'
+import { CreateButton } from '@/components/CreateButton'
 import { CreateTaskButton } from '@/components/tasks/CreateTaskButton'
 import { TasksSection } from '@/components/tasks/TasksSection'
 import { ArrowDownIcon } from '@/icons'

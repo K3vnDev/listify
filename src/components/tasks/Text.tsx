@@ -72,7 +72,7 @@ export const Text = ({ value }: Props) => {
     </span>
   ) : (
     <textarea
-      className='resize-none text-black w-full py-2 my-2 ml-2 pl-1 h-fit [field-sizing:content] bg-[#d9d9d9] outline outline-2 outline-zinc-400/25 rounded'
+      className='resize-none text-black w-full py-2 my-2 ml-2 pl-1 h-fit [field-sizing:content] bg-[#d9d9d9] outline outline-2 outline-[#DAA4A4]/50 rounded'
       placeholder='Type in your task...'
       value={value}
       onChange={handleChange}

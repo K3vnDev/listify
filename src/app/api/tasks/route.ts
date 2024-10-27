@@ -1,11 +1,12 @@
-import { listIdMiddleware } from '@api/listIdMiddleware'
+import { middleware } from '@/app/api/middleware'
+import { Response } from '@api/response'
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
-import { type NextRequest, NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
 
-// Get All Tasks
+// Get All Tasks from a list
 export const GET = async (request: NextRequest) =>
-  listIdMiddleware(request, async listId => {
+  middleware.listId(request, async listId => {
     const supabase = createRouteHandlerClient({ cookies })
 
     const { data, error, status } = await supabase
@@ -13,20 +14,24 @@ export const GET = async (request: NextRequest) =>
       .select('id, text, done')
       .eq('list_id', listId)
 
-    if (error) return NextResponse.json({ success: false }, { status })
-    return NextResponse.json({ success: true, data }, { status: 200 })
+    if (error) return Response(false, status)
+    return Response(true, 200, 'OK', data)
   })
 
 // Update task row (text or done column)
 export const PATCH = async (request: NextRequest) =>
-  listIdMiddleware(request, async listId => {
+  middleware.listId(request, async listId => {
     const { target, value, taskId } = (await request.json()) as RequestJSON
 
-    if (!target || !TARGETS.includes(target) || value === undefined || typeof taskId !== 'string')
-      return NextResponse.json(
-        { success: false, message: 'Some values are missing or invalid' },
-        { status: 400 }
-      )
+    if (!taskId || typeof taskId !== 'string')
+      return Response(false, 400, 'Task id missing or invalid')
+
+    // biome-ignore format: <>
+    if (!((typeof value === 'string' && target === 'text') ||
+        (typeof value === 'boolean' && target === 'done')) || value === undefined
+    )
+      return Response(false, 400, 'Target and values are missing or invalid')
+
     const supabase = createRouteHandlerClient({ cookies })
 
     const updateObj = {}
@@ -38,8 +43,8 @@ export const PATCH = async (request: NextRequest) =>
       .eq('list_id', listId)
       .eq('id', taskId)
 
-    if (error) return NextResponse.json({ success: false }, { status })
-    return NextResponse.json({ success: true }, { status: 200 })
+    if (error) return Response(false, status)
+    return Response(true, 200)
   })
 
 const TARGETS = ['done', 'text'] as const
@@ -52,7 +57,7 @@ interface RequestJSON {
 
 // Create new task and get its id
 export const POST = (request: NextRequest) =>
-  listIdMiddleware(request, async listId => {
+  middleware.listId(request, async listId => {
     const supabase = createRouteHandlerClient({ cookies })
 
     const { data, error, status } = await supabase
@@ -60,6 +65,25 @@ export const POST = (request: NextRequest) =>
       .insert([{ list_id: listId }])
       .select('id')
 
-    if (error) return NextResponse.json({ success: false }, { status })
-    return NextResponse.json({ success: true, data }, { status: 200 })
+    if (error) return Response(false, status)
+    return Response(true, 201, 'OK', data)
+  })
+
+// Delete task
+export const DELETE = (request: NextRequest) =>
+  middleware.listId(request, async listId => {
+    const supabase = createRouteHandlerClient({ cookies })
+    const { taskId } = await request.json()
+
+    if (!taskId || typeof taskId !== 'string')
+      return Response(false, 400, 'Task id missing or invalid')
+
+    const { error, status } = await supabase
+      .from('tasks')
+      .delete()
+      .eq('list_id', listId)
+      .eq('id', taskId)
+
+    if (error) return Response(false, status)
+    return Response(true, 200)
   })

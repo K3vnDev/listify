@@ -1,7 +1,7 @@
 import { UNSAVED_TASK_ID } from '@/consts'
 import { useStore } from '@/store/useStore'
 import { useEffect, useState } from 'react'
-import { AddButton } from '../AddButton'
+import { CreateButton } from '../CreateButton'
 
 export const CreateTaskButton = () => {
   const createTask = useStore(s => s.createTask)
@@ -10,7 +10,7 @@ export const CreateTaskButton = () => {
   const [creatingTask, setCreatingTask] = useState(false)
 
   const handleClick = () => {
-    createTask()
+    createTask(UNSAVED_TASK_ID)
     setEditingTask(UNSAVED_TASK_ID)
   }
 
@@ -19,5 +19,5 @@ export const CreateTaskButton = () => {
     setCreatingTask(newCreatingTask)
   }, [tasks])
 
-  return <AddButton id='create-task-btn' onClick={handleClick} loading={creatingTask} />
+  return <CreateButton id='create-task-btn' onClick={handleClick} loading={creatingTask} />
 }

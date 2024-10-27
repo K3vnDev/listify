@@ -1,6 +1,7 @@
 import { UNSAVED_TASK_ID } from '@/consts'
 import type { List, Task } from '@/types.d'
 import { create } from 'zustand'
+import { modifyTasks } from './modifyTasks'
 
 interface Store {
   lists: List[] | null
@@ -9,11 +10,12 @@ interface Store {
   tasks: Task[] | null
   setTasks: (value: Task[] | null) => void
 
+  createTask: (id: string, text?: string, done?: boolean, atIndex?: number) => void
+  deleteTask: (id: string) => void
+
   setTaskDone: (value: boolean, id: string) => void
   setTaskText: (value: string, id: string) => void
-
-  createTask: () => void
-  setUnSavedTaskId: (value: string) => void
+  setTaskId: (value: string, id: string) => void
 
   editingTask: string | null
   setEditingTask: (value: string | null) => void
@@ -26,59 +28,53 @@ export const useStore = create<Store>(set => ({
   tasks: null,
   setTasks: value => set(() => ({ tasks: value })),
 
-  setTaskDone: (value, id) =>
+  createTask: (id, text = '', done = false, atIndex?) =>
     set(({ tasks }) => {
-      if (tasks === null) return {}
+      const newTasks = [...(tasks ?? [])]
+      const newTask: Task = { id, text, done }
 
-      const index = tasks.findIndex(task => task.id === id)
-      const newTasks = [...tasks]
-      const newTask = newTasks[index]
-
-      newTask.done = value
-      newTasks.splice(index, 1, newTask)
-
-      return { tasks: newTasks }
+      if (atIndex !== undefined && atIndex !== -1) {
+        newTasks.splice(atIndex, 0, newTask)
+        return { tasks: newTasks }
+      }
+      return { tasks: [...newTasks, newTask] }
     }),
+
+  deleteTask: id =>
+    set(({ tasks }) =>
+      modifyTasks(tasks, id, (newTasks, _, i) => {
+        newTasks.splice(i, 1)
+        return newTasks
+      })
+    ),
+
+  setTaskDone: (value, id) =>
+    set(({ tasks }) =>
+      modifyTasks(tasks, id, (newTasks, selectedTask, i) => {
+        selectedTask.done = value
+        newTasks.splice(i, 1, selectedTask)
+        return newTasks
+      })
+    ),
 
   setTaskText: (value, id) =>
-    set(({ tasks }) => {
-      if (tasks === null) return {}
+    set(({ tasks }) =>
+      modifyTasks(tasks, id, (newTasks, selectedTask, i) => {
+        selectedTask.text = value
+        newTasks.splice(i, 1, selectedTask)
+        return newTasks
+      })
+    ),
 
-      const index = tasks.findIndex(task => task.id === id)
-      const newTasks = [...tasks]
-      const newTask = newTasks[index]
-
-      newTask.text = value
-      newTasks.splice(index, 1, newTask)
-
-      return { tasks: newTasks }
-    }),
-
-  createTask: () =>
-    set(({ tasks }) => {
-      const newTask: Task = {
-        id: UNSAVED_TASK_ID,
-        text: '',
-        done: false
-      }
-      const newTasks = [...(tasks ?? []), newTask]
-      return { tasks: newTasks }
-    }),
-
-  setUnSavedTaskId: value =>
-    set(({ tasks }) => {
-      if (tasks === null) return {}
-
-      const index = tasks.findIndex(task => task.id === UNSAVED_TASK_ID)
-      if (index === -1) return {}
-
-      const newTasks = [...tasks]
-      const newTask = newTasks[index]
-      newTask.id = value
-      newTasks.splice(index, 1, newTask)
-
-      return { tasks: newTasks }
-    }),
+  setTaskId: (value, id) =>
+    set(({ tasks, setEditingTask }) =>
+      modifyTasks(tasks, id, (newTasks, selectedTask, i) => {
+        selectedTask.id = value
+        newTasks.splice(i, 1, selectedTask)
+        setEditingTask(value)
+        return newTasks
+      })
+    ),
 
   editingTask: null,
   setEditingTask: value => set(() => ({ editingTask: value }))

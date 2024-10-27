@@ -1,10 +1,11 @@
-import { listIdMiddleware } from '@api/listIdMiddleware'
+import { middleware } from '@api/middleware'
+import { Response } from '@api/response'
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
 import { type NextRequest, NextResponse } from 'next/server'
 
-export async function GET(request: NextRequest) {
-  return listIdMiddleware(request, async listId => {
+export const GET = async (request: NextRequest) =>
+  middleware.listId(request, async listId => {
     const supabase = createRouteHandlerClient({ cookies })
 
     const { data, error, status } = await supabase
@@ -12,12 +13,9 @@ export async function GET(request: NextRequest) {
       .select('id, name, color')
       .eq('id', listId)
 
-    if (error) return NextResponse.json({ success: false }, { status })
-
-    if (data.length === 0)
-      return NextResponse.json({ success: false, message: 'List not found' }, { status: 404 })
+    if (error) return Response(false, status)
+    if (data.length === 0) return Response(false, 404, 'Requested list not found')
 
     const [list] = data
-    return NextResponse.json({ data: list }, { status: 200 })
+    return Response(true, 200, 'OK', list)
   })
-}

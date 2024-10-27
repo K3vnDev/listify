@@ -8,13 +8,13 @@ interface Props {
   id?: string
 }
 
-export const AddButton = ({ onClick, id, loading = false }: Props) => {
+export const CreateButton = ({ onClick, id, loading = false }: Props) => {
   const className = 'size-4 text-white stroke-[3px]'
 
   return (
     <button
       {...{ id, onClick }}
-      className='bg-green-600 rounded px-2 py-1 flex items-center gap-1 disabled:opacity-75'
+      className='button bg-green-600 rounded px-2 py-1 flex items-center gap-1'
       disabled={loading}
     >
       {

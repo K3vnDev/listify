@@ -1,9 +1,9 @@
 'use client'
 
-import { AddButton } from '@/components/AddButton'
+import { CreateButton } from '@/components/CreateButton'
 
 export const CreateListButton = () => {
   const handleClick = () => {}
 
-  return <AddButton onClick={handleClick} />
+  return <CreateButton onClick={handleClick} />
 }
