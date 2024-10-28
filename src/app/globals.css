@@ -9,3 +9,7 @@ body {
 .button {
   @apply hover:brightness-110 transition active:scale-95 active:brightness-95 disabled:opacity-75;
 }
+
+.border-editing {
+  @apply -outline-offset-2 outline-dashed outline-2 outline-[#DAA4A4];
+}

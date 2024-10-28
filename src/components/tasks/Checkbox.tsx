@@ -1,4 +1,4 @@
-import { usePatch } from '@/hooks/usePatch'
+import { useTaskPatch } from '@/hooks/useTaskPatch'
 import { CheckIcon } from '@/icons'
 import { useStore } from '@/store/useStore'
 import { TaskContext } from '@components/tasks/Task'
@@ -12,7 +12,7 @@ export const Checkbox = ({ checked }: Props) => {
   const { taskId } = useContext(TaskContext)
   const setTaskDone = useStore(s => s.setTaskDone)
 
-  const { trigger } = usePatch({
+  const { trigger } = useTaskPatch({
     taskId,
     prevValue: checked,
     target: 'done',

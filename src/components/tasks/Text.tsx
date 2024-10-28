@@ -1,4 +1,4 @@
-import { usePatch } from '@/hooks/usePatch'
+import { useTaskPatch } from '@/hooks/useTaskPatch'
 import { useStore } from '@/store/useStore'
 import { getElementRef } from '@/utils/getElementRef'
 import { TaskContext } from '@components/tasks/Task'
@@ -14,7 +14,7 @@ export const Text = ({ value }: Props) => {
   const setTaskText = useStore(s => s.setTaskText)
   const textareaRef = useRef(null)
 
-  const { trigger } = usePatch({
+  const { trigger } = useTaskPatch({
     taskId,
     prevValue: value,
     target: 'text',
@@ -74,13 +74,19 @@ export const Text = ({ value }: Props) => {
 
   return !isEditing ? (
     <span
-      className={`w-full text-black my-4 pl-3 cursor-pointer leading-[1.375rem] min-h-[1.375rem] text-pretty ${lineThrough}`}
+      className={`
+        w-full text-black my-4 pl-3 cursor-pointer leading-[1.375rem] 
+        min-h-[1.375rem] text-pretty ${lineThrough}
+      `}
     >
       {value}
     </span>
   ) : (
     <textarea
-      className='resize-none text-black w-full py-2 my-2 ml-2 pl-1 h-fit [field-sizing:content] bg-[#d9d9d9] outline outline-2 outline-[#DAA4A4]/50 rounded'
+      className={`
+        resize-none text-black w-full py-2 my-2 ml-2 pl-1 h-fit [field-sizing:content] 
+        bg-[#d9d9d9] outline outline-2 outline-[#DAA4A4]/50 rounded
+      `}
       placeholder='Type in your task...'
       value={value}
       onChange={handleChange}

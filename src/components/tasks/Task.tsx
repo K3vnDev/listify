@@ -18,13 +18,13 @@ export const Task = ({ id, text, done }: TaskType) => {
   useUnSavedTask(id)
 
   const handleClick = (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
-    const clickedCheckbox = Boolean((e.target as HTMLElement).closest('input[type=checkbox]'))
+    const clickedCheckbox = (e.target as HTMLElement).closest('input[type=checkbox]')
     if (!clickedCheckbox) setEditingTask(id)
 
     if (e.shiftKey && !isEditing) deleteTask()
   }
 
-  const outline = isEditing ? '-outline-offset-2 outline-dashed outline-2 outline-[#DAA4A4]' : ''
+  const outline = isEditing ? 'border-editing' : ''
   const background = done && !isEditing ? 'bg-[#c0c0c0]' : 'bg-[#cfcfcf]'
 
   return (

@@ -1,8 +1,6 @@
 import { useParams } from 'next/navigation'
 import { useEffect, useRef } from 'react'
 
-type Value = boolean | string
-
 interface Params<T> {
   taskId: string
   prevValue: T
@@ -10,7 +8,7 @@ interface Params<T> {
   onError: (prevValue: T) => void
 }
 
-export const usePatch = <T>({ taskId, prevValue, target, onError }: Params<T>) => {
+export const useTaskPatch = <T>({ taskId, prevValue, target, onError }: Params<T>) => {
   const timeout = useRef<NodeJS.Timeout>()
   const prevValueRef = useRef<T>()
   const { listId } = useParams()
@@ -21,7 +19,6 @@ export const usePatch = <T>({ taskId, prevValue, target, onError }: Params<T>) =
 
     timeout.current = setTimeout(async () => {
       try {
-        console.log('database call')
         const res = await fetch(`/api/tasks?list-id=${listId}`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
