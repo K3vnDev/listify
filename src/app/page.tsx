@@ -5,12 +5,10 @@ import { redirect } from 'next/navigation'
 
 export default async function Home() {
   const supabase = createServerComponentClient({ cookies })
+  const auth = await supabase.auth.getUser()
+  const { user } = auth.data
 
-  const {
-    data: { session }
-  } = await supabase.auth.getSession()
-
-  if (session !== null) redirect('/mylists')
+  if (user !== null) redirect('/mylists')
 
   return (
     <main>

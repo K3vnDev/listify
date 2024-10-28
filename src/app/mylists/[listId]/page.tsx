@@ -1,6 +1,6 @@
 'use client'
 
-import { CreateButton } from '@/components/CreateButton'
+import { Name } from '@/components/lists/Name'
 import { CreateTaskButton } from '@/components/tasks/CreateTaskButton'
 import { TasksSection } from '@/components/tasks/TasksSection'
 import { ArrowDownIcon } from '@/icons'
@@ -15,14 +15,19 @@ export default function ListView() {
 
   const [list, setList] = useState<List | null>(null)
 
-  const handleError = () => {}
+  const handleError = () => {
+    // TODO: Handle errors
+  }
 
   const fetchList = async () => {
     try {
       const res = await fetch(`/api/lists?list-id=${listId}`)
-      if (!res.ok) return handleError()
+      const { success, data } = await res.json()
 
-      const { data } = await res.json()
+      if (!res.ok || !success) {
+        handleError()
+        return
+      }
       setList(data)
     } catch {
       handleError()
@@ -34,22 +39,21 @@ export default function ListView() {
       fetchList()
       return
     }
-
     const list = lists.find(list => list.id === listId)
-    if (list === undefined) return handleError()
+    if (!list) {
+      handleError()
+      return
+    }
     setList(list)
   }, [])
-
-  if (list === null) return null
-  const { name, color } = list
 
   return (
     <main
       className='bg-[#ddd] flex flex-col w-full rounded-2xl py-6 px-4 border-t-8 gap-6'
-      style={{ borderColor: color }}
+      style={{ borderColor: list?.color ?? 'gray' }}
     >
-      <header className='flex w-full justify-between gap-2'>
-        <h3 className='font-bold text-2xl text-nowrap text-ellipsis overflow-hidden'>{name}</h3>
+      <header className='flex w-full max-w-full justify-between items-center gap-4'>
+        <Name name={list?.name} />
         <div className='flex items-center gap-2'>
           <CreateTaskButton />
           <ArrowDownIcon className='size-8 text-slate-600' />

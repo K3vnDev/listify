@@ -62,6 +62,14 @@ export const Text = ({ value }: Props) => {
     trigger(value)
   }
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    const { key, shiftKey } = e
+    if (key === 'Enter' && !shiftKey) {
+      e.preventDefault()
+      setEditingTask(null)
+    }
+  }
+
   const lineThrough = done ? 'line-through' : ''
 
   return !isEditing ? (
@@ -76,6 +84,7 @@ export const Text = ({ value }: Props) => {
       placeholder='Type in your task...'
       value={value}
       onChange={handleChange}
+      onKeyDown={handleKeyDown}
       ref={textareaRef}
     />
   )

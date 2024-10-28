@@ -15,6 +15,7 @@ export default async function MyLists() {
 
   const auth = await supabase.auth.getUser()
   const { user } = auth.data
+
   if (user === null) return redirect('/')
 
   return (
