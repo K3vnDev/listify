@@ -2,7 +2,7 @@ import { DEFAULT_LIST_NAME } from '@/consts'
 import { useActionOnClick } from '@/hooks/useActionOnClick'
 import { useListPatch } from '@/hooks/useListPatch'
 import { PencilIcon } from '@/icons'
-import { useStore } from '@/store/useStore'
+import { useListsStore } from '@/store/lists/useListsStore'
 import { useEffect, useRef, useState } from 'react'
 
 interface Props {
@@ -11,7 +11,7 @@ interface Props {
 
 export const Name = ({ name }: Props) => {
   const [isEditing, setIsediting] = useState(false)
-  const setListName = useStore(s => s.setListName)
+  const setListName = useListsStore(s => s.setListName)
   const inputRef = useRef(null)
 
   const { trigger } = useListPatch({

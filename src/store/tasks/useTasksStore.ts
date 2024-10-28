@@ -1,16 +1,8 @@
-import type { List, Task } from '@/types.d'
+import type { Task } from '@/types.d'
 import { create } from 'zustand'
 import { modifyTasks } from './modifyTasks'
 
-interface Store {
-  lists: List[] | null
-  setLists: (value: List[]) => void
-
-  selectedList: List | null
-  setSelectedList: (value: List) => void
-
-  setListName: (value: string) => void
-
+interface TasksStore {
   tasks: Task[] | null
   setTasks: (value: Task[] | null) => void
 
@@ -25,23 +17,9 @@ interface Store {
   setEditingTask: (value: string | null) => void
 }
 
-export const useStore = create<Store>(set => ({
-  lists: null,
-  setLists: value => set(() => ({ lists: value })),
-
+export const useTasksStore = create<TasksStore>(set => ({
   tasks: null,
   setTasks: value => set(() => ({ tasks: value })),
-
-  selectedList: null,
-  setSelectedList: value => set(() => ({ selectedList: value })),
-
-  setListName: value =>
-    set(({ selectedList }) => {
-      if (selectedList === null) return {}
-      const newList = { ...selectedList }
-      newList.name = value
-      return { selectedList: newList }
-    }),
 
   createTask: (id, text = '', done = false, atIndex?) =>
     set(({ tasks }) => {

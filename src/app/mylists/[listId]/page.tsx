@@ -4,16 +4,16 @@ import { Name } from '@/components/lists/Name'
 import { CreateTaskButton } from '@/components/tasks/CreateTaskButton'
 import { TasksSection } from '@/components/tasks/TasksSection'
 import { ArrowDownIcon } from '@/icons'
-import { useStore } from '@/store/useStore'
+import { useListsStore } from '@/store/lists/useListsStore'
 import { useParams } from 'next/navigation'
 import { useEffect } from 'react'
 
 export default function ListView() {
-  const lists = useStore(s => s.lists)
+  const lists = useListsStore(s => s.lists)
   const { listId } = useParams()
 
-  const setSelectedList = useStore(s => s.setSelectedList)
-  const selectedList = useStore(s => s.selectedList)
+  const setSelectedList = useListsStore(s => s.setSelectedList)
+  const selectedList = useListsStore(s => s.selectedList)
 
   const handleError = () => {
     // TODO: Handle errors

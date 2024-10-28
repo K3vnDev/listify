@@ -1,5 +1,5 @@
 import { useTaskPatch } from '@/hooks/useTaskPatch'
-import { useStore } from '@/store/useStore'
+import { useTasksStore } from '@/store/tasks/useTasksStore'
 import { getElementRef } from '@/utils/getElementRef'
 import { TaskContext } from '@components/tasks/Task'
 import { useContext, useEffect, useRef } from 'react'
@@ -10,8 +10,8 @@ interface Props {
 
 export const Text = ({ value }: Props) => {
   const { taskId, isEditing, elementRef, done } = useContext(TaskContext)
-  const setEditingTask = useStore(s => s.setEditingTask)
-  const setTaskText = useStore(s => s.setTaskText)
+  const setEditingTask = useTasksStore(s => s.setEditingTask)
+  const setTaskText = useTasksStore(s => s.setTaskText)
   const textareaRef = useRef(null)
 
   const { trigger } = useTaskPatch({

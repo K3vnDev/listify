@@ -1,12 +1,12 @@
 import { LoadingIcon } from '@/icons'
-import { useStore } from '@/store/useStore'
+import { useTasksStore } from '@/store/tasks/useTasksStore'
 import { Task } from '@components/tasks/Task'
 import { useParams } from 'next/navigation'
 import { useEffect } from 'react'
 
 export const TasksSection = () => {
-  const setTasks = useStore(s => s.setTasks)
-  const tasks = useStore(s => s.tasks)
+  const setTasks = useTasksStore(s => s.setTasks)
+  const tasks = useTasksStore(s => s.tasks)
 
   const { listId } = useParams()
 

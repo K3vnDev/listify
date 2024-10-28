@@ -1,6 +1,6 @@
 import { useDeleteTask } from '@/hooks/useDeleteTask'
 import { useUnSavedTask } from '@/hooks/useUnSavedTask'
-import { useStore } from '@/store/useStore'
+import { useTasksStore } from '@/store/tasks/useTasksStore'
 import type { Task as TaskType } from '@/types.d'
 import { Checkbox } from '@components/tasks/Checkbox'
 import { DeleteTaskButton } from '@components/tasks/DeleteTaskButton'
@@ -9,8 +9,8 @@ import { createContext, useEffect, useRef, useState } from 'react'
 
 export const Task = ({ id, text, done }: TaskType) => {
   const [isEditing, setIsEditing] = useState(false)
-  const editingTask = useStore(s => s.editingTask)
-  const setEditingTask = useStore(s => s.setEditingTask)
+  const editingTask = useTasksStore(s => s.editingTask)
+  const setEditingTask = useTasksStore(s => s.setEditingTask)
   useEffect(() => setIsEditing(editingTask === id), [editingTask])
 
   const { deleteTask } = useDeleteTask(id, text, done)

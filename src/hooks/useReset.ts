@@ -1,8 +1,8 @@
-import { useStore } from '@/store/useStore'
+import { useTasksStore } from '@/store/tasks/useTasksStore'
 
 export const useReset = () => {
-  const setTasks = useStore(s => s.setTasks)
-  const setEditingTask = useStore(s => s.setEditingTask)
+  const setTasks = useTasksStore(s => s.setTasks)
+  const setEditingTask = useTasksStore(s => s.setEditingTask)
 
   const reset = () => {
     setTasks(null)

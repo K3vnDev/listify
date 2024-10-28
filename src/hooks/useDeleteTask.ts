@@ -1,10 +1,10 @@
-import { useStore } from '@/store/useStore'
+import { useTasksStore } from '@/store/tasks/useTasksStore'
 import { useParams } from 'next/navigation'
 
 export const useDeleteTask = (taskId: string, text: string, done: boolean) => {
-  const deleteTask = useStore(s => s.deleteTask)
-  const createTask = useStore(s => s.createTask)
-  const tasks = useStore(s => s.tasks)
+  const deleteTask = useTasksStore(s => s.deleteTask)
+  const createTask = useTasksStore(s => s.createTask)
+  const tasks = useTasksStore(s => s.tasks)
   const { listId } = useParams()
 
   const handleDeleteTask = async () => {

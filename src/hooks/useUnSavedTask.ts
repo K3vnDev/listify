@@ -1,11 +1,11 @@
 import { UNSAVED_TASK_ID } from '@/consts'
-import { useStore } from '@/store/useStore'
+import { useTasksStore } from '@/store/tasks/useTasksStore'
 import { useParams } from 'next/navigation'
 import { useEffect, useRef } from 'react'
 
 export const useUnSavedTask = (taskId: string) => {
-  const setTaskId = useStore(s => s.setTaskId)
-  const deleteTask = useStore(s => s.deleteTask)
+  const setTaskId = useTasksStore(s => s.setTaskId)
+  const deleteTask = useTasksStore(s => s.deleteTask)
   const { listId } = useParams()
   const isFirstRender = useRef(true)
 

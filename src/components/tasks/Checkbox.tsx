@@ -1,6 +1,6 @@
 import { useTaskPatch } from '@/hooks/useTaskPatch'
 import { CheckIcon } from '@/icons'
-import { useStore } from '@/store/useStore'
+import { useTasksStore } from '@/store/tasks/useTasksStore'
 import { TaskContext } from '@components/tasks/Task'
 import { useContext } from 'react'
 
@@ -10,7 +10,7 @@ interface Props {
 
 export const Checkbox = ({ checked }: Props) => {
   const { taskId } = useContext(TaskContext)
-  const setTaskDone = useStore(s => s.setTaskDone)
+  const setTaskDone = useTasksStore(s => s.setTaskDone)
 
   const { trigger } = useTaskPatch({
     taskId,
