@@ -4,7 +4,7 @@ import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
 import type { NextRequest } from 'next/server'
 
-// Get All Lists
+// Get a single list
 export const GET = async (request: NextRequest) =>
   middleware.listId(request, async listId => {
     const supabase = createRouteHandlerClient({ cookies })
@@ -36,9 +36,9 @@ export const PATCH = async (request: NextRequest) =>
 
     // biome-ignore format: <>
     const { error, status } = await supabase
-    .from('lists')
-    .update(updateObj)
-    .eq('id', listId)
+      .from('lists')
+      .update(updateObj)
+      .eq('id', listId)
 
     if (error) return Response(false, status)
     return Response(true, 200)

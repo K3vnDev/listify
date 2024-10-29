@@ -10,7 +10,6 @@ import { useParams } from 'next/navigation'
 import { useEffect } from 'react'
 
 export default function ListView() {
-  const lists = useListsStore(s => s.lists)
   const { listId } = useParams()
 
   const setSelectedList = useListsStore(s => s.setSelectedList)
@@ -20,22 +19,16 @@ export default function ListView() {
     // TODO: Handle errors
   }
 
-  const saveListToStore = async () => {
-    let toSaveList = lists?.find(list => list.id === listId)
-
-    if (toSaveList === undefined) {
-      await dataFetch({
+  useEffect(() => {
+    if (selectedList === null) {
+      dataFetch({
         url: `/api/lists?list-id=${listId}`,
         onSuccess: data => {
-          toSaveList = data
+          setSelectedList(data)
         },
         onError: handleError
       })
     }
-    toSaveList ? setSelectedList(toSaveList) : handleError()
-  }
-  useEffect(() => {
-    saveListToStore()
   }, [])
 
   return (

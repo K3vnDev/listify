@@ -6,7 +6,7 @@ interface ListsStore {
   setLists: (value: List[]) => void
 
   selectedList: List | null
-  setSelectedList: (value: List) => void
+  setSelectedList: (value: List | null) => void
 
   setListName: (value: string) => void
 }

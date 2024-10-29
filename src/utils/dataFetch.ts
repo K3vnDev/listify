@@ -1,13 +1,14 @@
 interface Params {
   url: string
   options?: RequestInit
-  onSuccess?: (data: any) => void
-  onError?: () => void
+  onSuccess?: (data: any, message?: string) => void
+  onError?: (message?: string) => void
 }
 
 interface JSONResponse {
   success: boolean
   data: unknown
+  message?: string
 }
 
 export const dataFetch = async ({
@@ -18,12 +19,12 @@ export const dataFetch = async ({
 }: Params) => {
   try {
     const res = await fetch(url, options)
-    const { success, data } = (await res.json()) as JSONResponse
+    const { success, data, message } = (await res.json()) as JSONResponse
 
     if (!success || !res.ok) {
-      return onError()
+      return onError(message)
     }
-    onSuccess(data)
+    onSuccess(data, message)
   } catch {
     onError()
   }

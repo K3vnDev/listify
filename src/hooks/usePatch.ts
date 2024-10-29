@@ -3,16 +3,17 @@ import { useParams } from 'next/navigation'
 import { useEffect, useRef } from 'react'
 
 interface Params<T> {
-  taskId: string
   prevValue: T
-  target: 'done' | 'text'
-  onError: (prevValue: T) => void
+  onError?: (prevValue: T) => void
+  patch: { taskId: string; target: 'done' | 'text' } | { target: 'name' | 'color' }
 }
 
-export const useTaskPatch = <T>({ taskId, prevValue, target, onError }: Params<T>) => {
+export const usePatch = <T>({ prevValue, onError = () => {}, patch }: Params<T>) => {
   const timeout = useRef<NodeJS.Timeout>()
   const prevValueRef = useRef<T>()
   const { listId } = useParams()
+
+  const patchType = (patch as any).taskId ? 'tasks' : 'lists'
 
   const trigger = (newValue: T) => {
     clearTimeout(timeout.current)
@@ -20,11 +21,11 @@ export const useTaskPatch = <T>({ taskId, prevValue, target, onError }: Params<T
 
     timeout.current = setTimeout(async () => {
       dataFetch({
-        url: `/api/tasks?list-id=${listId}`,
+        url: `/api/${patchType}?list-id=${listId}`,
         options: {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ target, value: newValue, taskId })
+          body: JSON.stringify({ value: newValue, ...patch })
         },
         onError: () => {
           if (prevValueRef.current !== undefined) onError(prevValueRef.current)
@@ -35,7 +36,6 @@ export const useTaskPatch = <T>({ taskId, prevValue, target, onError }: Params<T
       })
     }, 500)
   }
-
   useEffect(() => () => clearTimeout(timeout.current), [])
 
   return { trigger }

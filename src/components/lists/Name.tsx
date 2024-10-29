@@ -1,6 +1,6 @@
 import { DEFAULT_LIST_NAME } from '@/consts'
 import { useActionOnClick } from '@/hooks/useActionOnClick'
-import { useListPatch } from '@/hooks/useListPatch'
+import { usePatch } from '@/hooks/usePatch'
 import { PencilIcon } from '@/icons'
 import { useListsStore } from '@/store/lists/useListsStore'
 import { useEffect, useRef, useState } from 'react'
@@ -14,9 +14,9 @@ export const Name = ({ name }: Props) => {
   const setListName = useListsStore(s => s.setListName)
   const inputRef = useRef(null)
 
-  const { trigger } = useListPatch({
+  const { trigger } = usePatch({
     prevValue: name,
-    target: 'name',
+    patch: { target: 'name' },
     onError: prevValue => {
       setListName(prevValue ?? '')
     }

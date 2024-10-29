@@ -1,4 +1,4 @@
-import { useTaskPatch } from '@/hooks/useTaskPatch'
+import { usePatch } from '@/hooks/usePatch'
 import { useTasksStore } from '@/store/tasks/useTasksStore'
 import { getElementRef } from '@/utils/getElementRef'
 import { TaskContext } from '@components/tasks/Task'
@@ -14,10 +14,9 @@ export const Text = ({ value }: Props) => {
   const setTaskText = useTasksStore(s => s.setTaskText)
   const textareaRef = useRef(null)
 
-  const { trigger } = useTaskPatch({
-    taskId,
+  const { trigger } = usePatch({
     prevValue: value,
-    target: 'text',
+    patch: { taskId, target: 'text' },
     onError: prevValue => {
       setTaskText(prevValue, taskId)
     }
