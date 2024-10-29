@@ -1,5 +1,6 @@
 import { LoadingIcon } from '@/icons'
 import { useTasksStore } from '@/store/tasks/useTasksStore'
+import { dataFetch } from '@/utils/dataFetch'
 import { Task } from '@components/tasks/Task'
 import { useParams } from 'next/navigation'
 import { useEffect } from 'react'
@@ -10,19 +11,16 @@ export const TasksSection = () => {
 
   const { listId } = useParams()
 
-  const handleError = () => {}
+  const handleError = () => {
+    // TODO: Handle error
+  }
 
   useEffect(() => {
-    ;(async () => {
-      try {
-        const res = await fetch(`/api/tasks?list-id=${listId}`)
-        if (!res.ok) handleError()
-        const { data } = await res.json()
-        setTasks(data)
-      } catch {
-        handleError()
-      }
-    })()
+    dataFetch({
+      url: `/api/tasks?list-id=${listId}`,
+      onSuccess: data => setTasks(data),
+      onError: handleError
+    })
   }, [])
 
   if (tasks === null)

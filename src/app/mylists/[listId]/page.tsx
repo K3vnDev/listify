@@ -5,6 +5,7 @@ import { CreateTaskButton } from '@/components/tasks/CreateTaskButton'
 import { TasksSection } from '@/components/tasks/TasksSection'
 import { ArrowDownIcon } from '@/icons'
 import { useListsStore } from '@/store/lists/useListsStore'
+import { dataFetch } from '@/utils/dataFetch'
 import { useParams } from 'next/navigation'
 import { useEffect } from 'react'
 
@@ -23,17 +24,13 @@ export default function ListView() {
     let toSaveList = lists?.find(list => list.id === listId)
 
     if (toSaveList === undefined) {
-      try {
-        const res = await fetch(`/api/lists?list-id=${listId}`)
-        const { success, data } = await res.json()
-
-        if (!res.ok || !success) {
-          return handleError()
-        }
-        toSaveList = data
-      } catch {
-        handleError()
-      }
+      await dataFetch({
+        url: `/api/lists?list-id=${listId}`,
+        onSuccess: data => {
+          toSaveList = data
+        },
+        onError: handleError
+      })
     }
     toSaveList ? setSelectedList(toSaveList) : handleError()
   }

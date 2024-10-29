@@ -1,3 +1,4 @@
+import { dataFetch } from '@/utils/dataFetch'
 import { useParams } from 'next/navigation'
 import { useEffect, useRef } from 'react'
 
@@ -17,24 +18,22 @@ export const useListPatch = <T>({ prevValue, target, onError }: Params<T>) => {
     if (prevValueRef.current === undefined) prevValueRef.current = prevValue
 
     timeout.current = setTimeout(async () => {
-      try {
-        const res = await fetch(`/api/lists?list-id=${listId}`, {
+      dataFetch({
+        url: `/api/lists?list-id=${listId}`,
+        options: {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ target, value: newValue })
-        })
-        const { success } = await res.json()
-        if ((!success || !res.ok) && prevValueRef.current !== undefined) {
-          onError(prevValueRef.current)
-          return
+        },
+        onError: () => {
+          if (prevValueRef.current !== undefined) onError(prevValueRef.current)
+        },
+        onSuccess: () => {
+          prevValueRef.current = newValue
         }
-        prevValueRef.current = newValue
-      } catch {
-        if (prevValueRef.current !== undefined) onError(prevValueRef.current)
-      }
+      })
     }, 500)
   }
-
   useEffect(() => () => clearTimeout(timeout.current), [])
 
   return { trigger }
