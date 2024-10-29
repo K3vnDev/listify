@@ -32,7 +32,7 @@ export const PATCH = async (request: NextRequest) =>
     const supabase = createRouteHandlerClient({ cookies })
 
     const updateObj = {}
-    ;(updateObj as any)[target] = value
+    ;(updateObj as any)[target] = value.trim()
 
     // biome-ignore format: <>
     const { error, status } = await supabase

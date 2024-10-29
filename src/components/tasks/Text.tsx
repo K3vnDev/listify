@@ -11,6 +11,7 @@ interface Props {
 export const Text = ({ value }: Props) => {
   const { taskId, isEditing, elementRef, done } = useContext(TaskContext)
   const setEditingTask = useTasksStore(s => s.setEditingTask)
+  const editingTask = useTasksStore(s => s.editingTask)
   const setTaskText = useTasksStore(s => s.setTaskText)
   const textareaRef = useRef(null)
 
@@ -28,32 +29,21 @@ export const Text = ({ value }: Props) => {
       textareaElement.focus()
       textareaElement.setSelectionRange(value.length, value.length)
     }
+  }, [isEditing])
 
+  useEffect(() => {
     const handleClick = (e: MouseEvent) => {
-      if (!isEditing) return
-      const target = e.target as HTMLElement
+      if (isEditing) {
+        const taskElement = getElementRef(elementRef)
+        const clickedOnThis = taskElement.contains(e.target as HTMLElement)
 
-      const taskElement = getElementRef(elementRef)
-
-      const clickedOn = {
-        thisTask: taskElement.contains(target),
-        anotherTask: !!target.closest('.task'),
-        taskCheckbox: !!target.closest('.task input[type=checkbox]'),
-        createTaskButton: !!target.closest('#create-task-btn')
+        if (clickedOnThis) getElementRef(textareaRef).focus()
+        else if (editingTask === taskId) setEditingTask(null)
       }
-
-      if (clickedOn.thisTask) {
-        getElementRef(textareaRef).focus()
-        return
-      }
-
-      if ((!clickedOn.anotherTask && !clickedOn.createTaskButton) || clickedOn.taskCheckbox)
-        setEditingTask(null)
     }
-
     document.addEventListener('click', handleClick)
     return () => document.removeEventListener('click', handleClick)
-  }, [elementRef.current, isEditing])
+  }, [elementRef.current, isEditing, editingTask])
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { value } = e.target

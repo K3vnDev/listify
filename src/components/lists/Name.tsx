@@ -1,5 +1,5 @@
 import { DEFAULT_LIST_NAME } from '@/consts'
-import { useActionOnClick } from '@/hooks/useActionOnClick'
+import { useOnClickSelector } from '@/hooks/useOnClickSelector'
 import { usePatch } from '@/hooks/usePatch'
 import { PencilIcon } from '@/icons'
 import { useListsStore } from '@/store/lists/useListsStore'
@@ -22,7 +22,7 @@ export const Name = ({ name }: Props) => {
     }
   })
 
-  useActionOnClick(
+  useOnClickSelector(
     clickedInside => {
       if (clickedInside !== isEditing) setIsediting(clickedInside)
     },

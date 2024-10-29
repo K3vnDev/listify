@@ -5,7 +5,7 @@ interface Params {
   selectors?: string[]
 }
 
-export const useActionOnClick = (
+export const useOnClickSelector = (
   action: (value: boolean) => void,
   { event = 'click', selectors = [] }: Params
 ) => {

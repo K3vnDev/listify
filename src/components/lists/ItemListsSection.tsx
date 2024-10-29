@@ -9,6 +9,7 @@ import { useEffect } from 'react'
 export const ItemListsSection = () => {
   const lists = useListsStore(s => s.lists)
   const setLists = useListsStore(s => s.setLists)
+  const listsDisplayMode = useListsStore(s => s.listsDisplayMode)
   useReset()
 
   const handleError = () => {
@@ -26,8 +27,13 @@ export const ItemListsSection = () => {
 
   if (!lists) return null
 
+  const className = {
+    list: 'flex flex-col gap-3',
+    grid: 'grid [grid-template-columns:repeat(auto-fit,_minmax(300px,_1fr))] grid-rows-5 gap-3 *:size-full *:h-20'
+  }
+
   return (
-    <ul className='flex flex-col gap-3'>
+    <ul className={className[listsDisplayMode]}>
       {lists.map(list => (
         <ItemList key={list.id} {...list} />
       ))}

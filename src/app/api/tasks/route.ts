@@ -35,7 +35,7 @@ export const PATCH = async (request: NextRequest) =>
     const supabase = createRouteHandlerClient({ cookies })
 
     const updateObj = {}
-    ;(updateObj as any)[target] = value
+    ;(updateObj as any)[target] = typeof value === 'string' ? value.trim() : value
 
     const { error, status } = await supabase
       .from('tasks')

@@ -1,38 +1,19 @@
-import { useDeleteTask } from '@/hooks/useDeleteTask'
-import { useUnSavedTask } from '@/hooks/useUnSavedTask'
-import { useTasksStore } from '@/store/tasks/useTasksStore'
+import { useTask } from '@/hooks/useTask'
 import type { Task as TaskType } from '@/types.d'
 import { Checkbox } from '@components/tasks/Checkbox'
 import { DeleteTaskButton } from '@components/tasks/DeleteTaskButton'
 import { Text } from '@components/tasks/Text'
-import { createContext, useEffect, useRef, useState } from 'react'
+import { createContext } from 'react'
 
 export const Task = ({ id, text, done }: TaskType) => {
-  const [isEditing, setIsEditing] = useState(false)
-  const editingTask = useTasksStore(s => s.editingTask)
-  const setEditingTask = useTasksStore(s => s.setEditingTask)
-  useEffect(() => setIsEditing(editingTask === id), [editingTask])
-
-  const { deleteTask } = useDeleteTask(id, text, done)
-  const elementRef = useRef(null)
-  useUnSavedTask(id)
-
-  const handleClick = (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
-    const clickedCheckbox = (e.target as HTMLElement).closest('input[type=checkbox]')
-    if (!clickedCheckbox) setEditingTask(id)
-
-    if (e.shiftKey && !isEditing) deleteTask()
-  }
-
-  const outline = isEditing ? 'border-editing' : ''
-  const background = done && !isEditing ? 'bg-[#c0c0c0]' : 'bg-[#cfcfcf]'
+  const { isEditing, elementRef, handleClick, styles: s } = useTask({ id, text, done })
 
   return (
     <li
       onClick={handleClick}
       className={`
         task flex items-center justify-between pr-3 bg-[#cfcfcf] 
-        ${background} hover:brightness-[102%] rounded-lg gap-4 ${outline} cursor-pointer
+        ${s.background} hover:brightness-[102%] rounded-lg gap-4 ${s.outline} cursor-pointer
       `}
       ref={elementRef}
     >

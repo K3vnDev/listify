@@ -9,3 +9,5 @@ export interface Task {
   text: string
   done: boolean
 }
+
+export type ListsDisplayMode = 'list' | 'grid'
