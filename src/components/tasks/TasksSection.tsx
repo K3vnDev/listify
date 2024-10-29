@@ -1,5 +1,6 @@
 import { LoadingIcon } from '@/icons'
 import { useTasksStore } from '@/store/tasks/useTasksStore'
+import type { Task as TaskType } from '@/types'
 import { dataFetch } from '@/utils/dataFetch'
 import { Task } from '@components/tasks/Task'
 import { useParams } from 'next/navigation'
@@ -16,7 +17,7 @@ export const TasksSection = () => {
   }
 
   useEffect(() => {
-    dataFetch({
+    dataFetch<TaskType[]>({
       url: `/api/tasks?list-id=${listId}`,
       onSuccess: data => setTasks(data),
       onError: handleError

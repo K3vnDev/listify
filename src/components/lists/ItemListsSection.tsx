@@ -3,6 +3,7 @@
 import { ItemList } from '@/components/lists/ItemList'
 import { useReset } from '@/hooks/useReset'
 import { useListsStore } from '@/store/lists/useListsStore'
+import type { List } from '@/types'
 import { dataFetch } from '@/utils/dataFetch'
 import { useEffect } from 'react'
 
@@ -18,7 +19,7 @@ export const ItemListsSection = () => {
 
   useEffect(() => {
     if (lists === null)
-      dataFetch({
+      dataFetch<List[]>({
         url: '/api/lists/all',
         onSuccess: data => setLists(data),
         onError: handleError

@@ -29,7 +29,7 @@ export const useTask = ({ id, text, done }: Task) => {
     if (id === UNSAVED_TASK_ID && isFirstRender.current) {
       isFirstRender.current = false
 
-      dataFetch({
+      dataFetch<Task[]>({
         url: `/api/tasks?list-id=${listId}`,
         options: { method: 'POST' },
         onSuccess: data => setTaskId(data[0].id, UNSAVED_TASK_ID),
