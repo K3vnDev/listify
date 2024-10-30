@@ -22,6 +22,7 @@ export const UserAvatar = ({ avatarUrl }: Props) => {
       <button
         onClick={handleLogOut}
         className='text-white p-[.3125rem] bg-gray-900 border border-gray-800 rounded-lg button'
+        title='Sign out'
       >
         <LogOutIcon className='text-gray-700 w-6' />
       </button>

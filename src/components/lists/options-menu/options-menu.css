@@ -1,0 +1,25 @@
+.options-menu {
+  --gap: .5rem;
+  --btn-w: 2rem;
+  transition: width .2s ease;
+
+  @apply flex justify-end gap-[--gap] w-[--btn-w] overflow-hidden;
+
+  &.showing {
+    width: calc(var(--gap) * 2 + var(--btn-w) * 3);
+
+    button:last-child {
+      rotate: -90deg;
+    }
+  }
+
+  button {
+    &:not(:last-child) {
+      @apply text-white flex items-center justify-center rounded;
+      svg {
+        @apply size-[80%] stroke-[1.5px];
+      }
+    }
+    @apply size-[--btn-w] min-w-[--btn-w] transition-all;
+  }
+}

@@ -1,6 +1,7 @@
 'use client'
 
 import { Name } from '@/components/lists/Name'
+import { OptionsMenu } from '@/components/lists/options-menu/OptionsMenu'
 import { CreateTaskButton } from '@/components/tasks/CreateTaskButton'
 import { TasksSection } from '@/components/tasks/TasksSection'
 import { ArrowDownIcon } from '@/icons'
@@ -41,9 +42,9 @@ export default function ListView() {
     >
       <header className='flex w-full max-w-full justify-between items-center gap-4'>
         <Name name={selectedList?.name} />
-        <div className='flex items-center gap-2'>
+        <div className='flex items-center gap-3'>
           <CreateTaskButton />
-          <ArrowDownIcon className='size-8 text-slate-600' />
+          <OptionsMenu />
         </div>
       </header>
       <TasksSection />
