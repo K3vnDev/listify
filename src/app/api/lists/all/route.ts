@@ -8,5 +8,5 @@ export const GET = async () => {
   const { data, error, status } = await supabase.from('lists').select('id, name, color')
 
   if (error) return Response(false, status)
-  return Response(true, 200, 'OK', data)
+  return Response(true, 200, { data })
 }

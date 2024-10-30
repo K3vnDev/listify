@@ -1,4 +1,4 @@
-import { LISTS_DISPLAY_MODE_ITEM_NAME } from '@/consts'
+import { DEFAULT_LIST_NAME, LISTS_DISPLAY_MODE_ITEM_NAME, UNSAVED_LIST_ID } from '@/consts'
 import type { List, ListsDisplayMode } from '@/types.d'
 import { create } from 'zustand'
 
@@ -11,6 +11,12 @@ interface ListsStore {
 
   listsDisplayMode: ListsDisplayMode
   setListsDisplayMode: (value: ListsDisplayMode) => void
+
+  createUnSavedList: () => void
+  saveUnSavedList: (id: string, color: string) => void
+
+  recentlySavedList: string | null
+  setRecentlySavedList: (value: string | null) => void
 
   setListName: (value: string) => void
 }
@@ -27,6 +33,37 @@ export const useListsStore = create<ListsStore>(set => ({
 
   selectedList: null,
   setSelectedList: value => set(() => ({ selectedList: value })),
+
+  createUnSavedList: () =>
+    set(({ lists }) => {
+      if (lists === null) return {}
+      const newList: List = {
+        id: UNSAVED_LIST_ID,
+        name: DEFAULT_LIST_NAME,
+        color: ''
+      }
+      return { lists: [...lists, newList] }
+    }),
+
+  saveUnSavedList: (id, color) =>
+    set(({ lists }) => {
+      if (lists === null) return {}
+      const newLists = [...lists]
+      const index = newLists.findIndex(l => l.id === UNSAVED_LIST_ID)
+      if (index === -1) return {}
+
+      const newSavedList = { ...newLists[index], id, color }
+      newLists.splice(index, 1, newSavedList)
+
+      return {
+        lists: newLists,
+        selectedList: newSavedList,
+        recentlySavedList: id
+      }
+    }),
+
+  recentlySavedList: null,
+  setRecentlySavedList: value => set(() => ({ recentlySavedList: value })),
 
   setListName: value =>
     set(({ selectedList }) => {

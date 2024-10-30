@@ -7,7 +7,7 @@ export const CreateTaskButton = () => {
   const createTask = useTasksStore(s => s.createTask)
   const tasks = useTasksStore(s => s.tasks)
   const setEditingTask = useTasksStore(s => s.setEditingTask)
-  const [creatingTask, setCreatingTask] = useState(false)
+  const [isCreatingTask, setIsCreatingTask] = useState(false)
 
   const handleClick = () => {
     createTask(UNSAVED_TASK_ID)
@@ -15,9 +15,15 @@ export const CreateTaskButton = () => {
   }
 
   useEffect(() => {
-    const newCreatingTask = tasks?.some(task => task.id === UNSAVED_TASK_ID) ?? false
-    setCreatingTask(newCreatingTask)
+    const newIsCreatingTask = tasks?.some(task => task.id === UNSAVED_TASK_ID) ?? false
+    setIsCreatingTask(newIsCreatingTask)
   }, [tasks])
 
-  return <CreateButton id='create-task-btn' onClick={handleClick} loading={creatingTask} />
+  return (
+    <CreateButton
+      id='create-task-btn'
+      loading={isCreatingTask || tasks === null}
+      onClick={handleClick}
+    />
+  )
 }

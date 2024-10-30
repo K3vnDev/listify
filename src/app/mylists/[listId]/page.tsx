@@ -5,6 +5,7 @@ import { CreateTaskButton } from '@/components/tasks/CreateTaskButton'
 import { TasksSection } from '@/components/tasks/TasksSection'
 import { ArrowDownIcon } from '@/icons'
 import { useListsStore } from '@/store/lists/useListsStore'
+import type { List } from '@/types'
 import { dataFetch } from '@/utils/dataFetch'
 import { useParams } from 'next/navigation'
 import { useEffect } from 'react'
@@ -14,6 +15,7 @@ export default function ListView() {
 
   const setSelectedList = useListsStore(s => s.setSelectedList)
   const selectedList = useListsStore(s => s.selectedList)
+  const setRecentlySavedList = useListsStore(s => s.setRecentlySavedList)
 
   const handleError = () => {
     // TODO: Handle errors
@@ -21,7 +23,7 @@ export default function ListView() {
 
   useEffect(() => {
     if (selectedList === null) {
-      dataFetch({
+      dataFetch<List>({
         url: `/api/lists?list-id=${listId}`,
         onSuccess: data => {
           setSelectedList(data)
@@ -29,6 +31,7 @@ export default function ListView() {
         onError: handleError
       })
     }
+    setRecentlySavedList(null)
   }, [])
 
   return (

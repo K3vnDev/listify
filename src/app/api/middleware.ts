@@ -8,7 +8,7 @@ export const middleware = {
     const { searchParams } = new URL(request.url)
     const listId = searchParams.get('list-id')
 
-    if (!listId) return Response(false, 400, 'List id missing or invalid')
+    if (!listId) return Response(false, 400, { msg: 'List id missing or invalid' })
     return await next(listId)
   }
 }

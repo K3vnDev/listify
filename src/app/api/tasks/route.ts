@@ -15,7 +15,7 @@ export const GET = async (request: NextRequest) =>
       .eq('list_id', listId)
 
     if (error) return Response(false, status)
-    return Response(true, 200, 'OK', data)
+    return Response(true, 200, { data })
   })
 
 // Update task row (text or done column)
@@ -24,13 +24,13 @@ export const PATCH = async (request: NextRequest) =>
     const { target, value, taskId } = (await request.json()) as RequestJSON
 
     if (!taskId || typeof taskId !== 'string')
-      return Response(false, 400, 'Task id missing or invalid')
+      return Response(false, 400, { msg: 'Task id missing or invalid' })
 
     // biome-ignore format: <>
     if (!((typeof value === 'string' && target === 'text') ||
         (typeof value === 'boolean' && target === 'done')) || value === undefined
     )
-      return Response(false, 400, 'Target and values are missing or invalid')
+      return Response(false, 400, {msg:'Target and values are missing or invalid'})
 
     const supabase = createRouteHandlerClient({ cookies })
 
@@ -66,7 +66,7 @@ export const POST = (request: NextRequest) =>
       .select('id')
 
     if (error) return Response(false, status)
-    return Response(true, 201, 'OK', data)
+    return Response(true, 201, { data })
   })
 
 // Delete task
@@ -76,7 +76,7 @@ export const DELETE = (request: NextRequest) =>
     const { taskId } = await request.json()
 
     if (!taskId || typeof taskId !== 'string')
-      return Response(false, 400, 'Task id missing or invalid')
+      return Response(false, 400, { msg: 'Task id missing or invalid' })
 
     const { error, status } = await supabase
       .from('tasks')

@@ -23,7 +23,8 @@ export const useTasksStore = create<TasksStore>(set => ({
 
   createTask: (id, text = '', done = false, atIndex?) =>
     set(({ tasks }) => {
-      const newTasks = [...(tasks ?? [])]
+      if (tasks === null) return {}
+      const newTasks = [...tasks]
       const newTask: Task = { id, text, done }
 
       if (atIndex !== undefined && atIndex !== -1) {
