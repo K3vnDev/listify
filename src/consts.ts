@@ -15,3 +15,4 @@ export const UNSAVED_LIST_ID = 'unsaved-list'
 
 export const DEFAULT_LIST_NAME = 'My new list'
 export const LISTS_DISPLAY_MODE_ITEM_NAME = 'lists-display-mode'
+export const NOT_LOADED_COLOR = '#808080'

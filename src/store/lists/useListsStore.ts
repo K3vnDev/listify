@@ -19,6 +19,7 @@ interface ListsStore {
   setRecentlySavedList: (value: string | null) => void
 
   setListName: (value: string) => void
+  setListColor: (value: string) => void
 }
 
 export const useListsStore = create<ListsStore>(set => ({
@@ -70,6 +71,14 @@ export const useListsStore = create<ListsStore>(set => ({
       if (selectedList === null) return {}
       const newList = { ...selectedList }
       newList.name = value
+      return { selectedList: newList }
+    }),
+
+  setListColor: value =>
+    set(({ selectedList }) => {
+      if (selectedList === null) return {}
+      const newList = { ...selectedList }
+      newList.color = value
       return { selectedList: newList }
     })
 }))

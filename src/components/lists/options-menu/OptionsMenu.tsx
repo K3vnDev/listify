@@ -5,9 +5,11 @@ import { PaletteButton } from './PaletteButton'
 import { ToggleMenuButton } from './ToggleMenuButton'
 import './options-menu.css'
 import { useOnClickSelector } from '@/hooks/useOnClickSelector'
+import { useListsStore } from '@/store/lists/useListsStore'
 
 export const OptionsMenu = () => {
-  const [isShowing, setIsShowing] = useState(false)
+  const [isShowing, setIsShowing] = useState(true)
+  const selectedList = useListsStore(s => s.selectedList)
 
   useOnClickSelector(
     clickedInside => {
@@ -21,8 +23,12 @@ export const OptionsMenu = () => {
   return (
     <OptionsMenuContext.Provider value={{ isShowing, setIsShowing }}>
       <div className={className}>
-        <DeleteButton />
-        <PaletteButton />
+        {selectedList !== null && (
+          <>
+            <DeleteButton />
+            <PaletteButton color={selectedList.color} />
+          </>
+        )}
         <ToggleMenuButton />
       </div>
     </OptionsMenuContext.Provider>

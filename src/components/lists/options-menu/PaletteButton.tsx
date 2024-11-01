@@ -1,13 +1,47 @@
+import { usePatch } from '@/hooks/usePatch'
 import { PaletteIcon } from '@/icons'
+import { useListsStore } from '@/store/lists/useListsStore'
+import { getContrastingColor } from '@/utils/getContrastingColor'
 import { useContext } from 'react'
 import { OptionsMenuContext } from './OptionsMenu'
 
-export const PaletteButton = () => {
+interface Props {
+  color: string
+}
+
+export const PaletteButton = ({ color }: Props) => {
   const { isShowing } = useContext(OptionsMenuContext)
+  const setListColor = useListsStore(s => s.setListColor)
+
+  const { trigger } = usePatch({
+    prevValue: color,
+    patch: { target: 'color' },
+    onError: prevValue => {
+      setListColor(prevValue)
+    }
+  })
+
+  const iconColor = getContrastingColor(color)
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target
+    setListColor(value)
+    trigger(value)
+  }
 
   return (
-    <button className='bg-zinc-600 button' disabled={!isShowing}>
-      <PaletteIcon />
+    <button
+      className='button border relative'
+      style={{ background: color, color: iconColor, borderColor: iconColor }}
+      disabled={!isShowing}
+    >
+      <PaletteIcon className='pointer-events-none' />
+      <input
+        type='color'
+        value={color}
+        className='absolute size-full top-0 left-0 opacity-0 cursor-pointer'
+        onChange={handleChange}
+      />
     </button>
   )
 }

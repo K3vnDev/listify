@@ -4,12 +4,11 @@ import { Name } from '@/components/lists/Name'
 import { OptionsMenu } from '@/components/lists/options-menu/OptionsMenu'
 import { CreateTaskButton } from '@/components/tasks/CreateTaskButton'
 import { TasksSection } from '@/components/tasks/TasksSection'
-import { ArrowDownIcon } from '@/icons'
 import { useListsStore } from '@/store/lists/useListsStore'
 import type { List } from '@/types'
 import { dataFetch } from '@/utils/dataFetch'
 import { useParams } from 'next/navigation'
-import { useEffect } from 'react'
+import { createContext, useEffect } from 'react'
 
 export default function ListView() {
   const { listId } = useParams()
