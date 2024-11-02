@@ -1,7 +1,7 @@
 import { UNSAVED_TASK_ID } from '@/consts'
+import { TaskContext } from '@/context/TaskContext'
 import { useDeleteTask } from '@/hooks/useDeleteTask'
 import { TrashIcon } from '@/icons'
-import { TaskContext } from '@components/tasks/Task'
 import { useContext } from 'react'
 
 export const DeleteTaskButton = () => {

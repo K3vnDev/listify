@@ -1,7 +1,7 @@
+import { TaskContext } from '@/context/TaskContext'
 import { usePatch } from '@/hooks/usePatch'
 import { CheckIcon } from '@/icons'
 import { useTasksStore } from '@/store/tasks/useTasksStore'
-import { TaskContext } from '@components/tasks/Task'
 import { useContext } from 'react'
 
 interface Props {

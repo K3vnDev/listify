@@ -1,7 +1,7 @@
+import { TaskContext } from '@/context/TaskContext'
 import { usePatch } from '@/hooks/usePatch'
 import { useTasksStore } from '@/store/tasks/useTasksStore'
 import { getElementRef } from '@/utils/getElementRef'
-import { TaskContext } from '@components/tasks/Task'
 import { useContext, useEffect, useRef } from 'react'
 
 interface Props {

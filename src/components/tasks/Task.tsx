@@ -1,9 +1,9 @@
+import { TaskContext } from '@/context/TaskContext'
 import { useTask } from '@/hooks/useTask'
 import type { Task as TaskType } from '@/types.d'
 import { Checkbox } from '@components/tasks/Checkbox'
 import { DeleteTaskButton } from '@components/tasks/DeleteTaskButton'
 import { Text } from '@components/tasks/Text'
-import { createContext } from 'react'
 
 export const Task = ({ id, text, done }: TaskType) => {
   const { isEditing, elementRef, handleClick, styles: s } = useTask({ id, text, done })
@@ -29,8 +29,3 @@ export const Task = ({ id, text, done }: TaskType) => {
     </li>
   )
 }
-
-export const TaskContext = createContext({
-  ...{ taskId: '', isEditing: false, text: '', done: false },
-  elementRef: { current: null } as React.MutableRefObject<null>
-})

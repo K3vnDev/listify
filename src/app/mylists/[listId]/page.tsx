@@ -4,12 +4,13 @@ import { Name } from '@/components/lists/Name'
 import { OptionsMenu } from '@/components/lists/options-menu/OptionsMenu'
 import { CreateTaskButton } from '@/components/tasks/CreateTaskButton'
 import { TasksSection } from '@/components/tasks/TasksSection'
+import { ListContext } from '@/context/ListContext'
 import { useRefreshStateLists } from '@/hooks/useRefreshStateLists'
 import { useListsStore } from '@/store/lists/useListsStore'
 import type { List } from '@/types'
 import { dataFetch } from '@/utils/dataFetch'
 import { useParams } from 'next/navigation'
-import { createContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function ListView() {
   const { listId } = useParams()
@@ -56,12 +57,3 @@ export default function ListView() {
     </ListContext.Provider>
   )
 }
-
-interface Context {
-  isBeingDeleted: boolean
-  setIsBeingDeleted: React.Dispatch<React.SetStateAction<boolean>>
-}
-export const ListContext = createContext<Context>({
-  isBeingDeleted: false,
-  setIsBeingDeleted: () => {}
-})

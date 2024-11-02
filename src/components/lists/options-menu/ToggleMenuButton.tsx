@@ -1,7 +1,7 @@
+import { OptionsMenuContext } from '@/context/OptionsMenuContext'
 import { ArrowDownIcon, MoreIcon } from '@/icons'
 import { useListsStore } from '@/store/lists/useListsStore'
 import { useContext } from 'react'
-import { OptionsMenuContext } from './OptionsMenu'
 
 export const ToggleMenuButton = () => {
   const { isShowing, setIsShowing } = useContext(OptionsMenuContext)

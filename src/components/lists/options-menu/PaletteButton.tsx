@@ -1,10 +1,10 @@
-import { ListContext } from '@/app/mylists/[listId]/page'
+import { ListContext } from '@/context/ListContext'
+import { OptionsMenuContext } from '@/context/OptionsMenuContext'
 import { usePatch } from '@/hooks/usePatch'
 import { PaletteIcon } from '@/icons'
 import { useListsStore } from '@/store/lists/useListsStore'
 import { getContrastingColor } from '@/utils/getContrastingColor'
 import { useContext } from 'react'
-import { OptionsMenuContext } from './OptionsMenu'
 
 interface Props {
   color: string

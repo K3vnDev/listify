@@ -1,11 +1,12 @@
+import { OptionsMenuContext } from '@/context/OptionsMenuContext'
+import { useOnClickSelector } from '@/hooks/useOnClickSelector'
+import { useListsStore } from '@/store/lists/useListsStore'
 import { conditionalClassName } from '@/utils/conditionalClassName'
-import { createContext, useState } from 'react'
+import { useState } from 'react'
 import { DeleteButton } from './DeleteButton'
 import { PaletteButton } from './PaletteButton'
 import { ToggleMenuButton } from './ToggleMenuButton'
 import './options-menu.css'
-import { useOnClickSelector } from '@/hooks/useOnClickSelector'
-import { useListsStore } from '@/store/lists/useListsStore'
 
 export const OptionsMenu = () => {
   const [isShowing, setIsShowing] = useState(false)
@@ -34,12 +35,3 @@ export const OptionsMenu = () => {
     </OptionsMenuContext.Provider>
   )
 }
-
-interface Context {
-  isShowing: boolean
-  setIsShowing: React.Dispatch<React.SetStateAction<boolean>>
-}
-export const OptionsMenuContext = createContext<Context>({
-  isShowing: false,
-  setIsShowing: () => {}
-})

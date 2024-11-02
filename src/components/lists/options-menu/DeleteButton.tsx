@@ -1,11 +1,11 @@
-import { ListContext } from '@/app/mylists/[listId]/page'
+import { ListContext } from '@/context/ListContext'
+import { OptionsMenuContext } from '@/context/OptionsMenuContext'
 import { LoadingIcon, TrashIcon } from '@/icons'
 import { useListsStore } from '@/store/lists/useListsStore'
 import { conditionalClassName } from '@/utils/conditionalClassName'
 import { dataFetch } from '@/utils/dataFetch'
 import { useParams, useRouter } from 'next/navigation'
 import { useContext, useEffect, useRef, useState } from 'react'
-import { OptionsMenuContext } from './OptionsMenu'
 
 const MAX_TIME = 1.2
 const PERIOD = 0.15
