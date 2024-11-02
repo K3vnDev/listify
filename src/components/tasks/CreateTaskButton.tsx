@@ -1,6 +1,7 @@
+import { ListContext } from '@/app/mylists/[listId]/page'
 import { UNSAVED_TASK_ID } from '@/consts'
 import { useTasksStore } from '@/store/tasks/useTasksStore'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { CreateButton } from '../CreateButton'
 
 export const CreateTaskButton = () => {
@@ -8,6 +9,7 @@ export const CreateTaskButton = () => {
   const tasks = useTasksStore(s => s.tasks)
   const setEditingTask = useTasksStore(s => s.setEditingTask)
   const [isCreatingTask, setIsCreatingTask] = useState(false)
+  const { isBeingDeleted } = useContext(ListContext)
 
   const handleClick = () => {
     createTask(UNSAVED_TASK_ID)
@@ -22,7 +24,7 @@ export const CreateTaskButton = () => {
   return (
     <CreateButton
       id='create-task-btn'
-      loading={isCreatingTask || tasks === null}
+      loading={isCreatingTask || tasks === null || isBeingDeleted}
       onClick={handleClick}
     />
   )

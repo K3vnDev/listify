@@ -20,6 +20,8 @@ interface ListsStore {
 
   setListName: (value: string) => void
   setListColor: (value: string) => void
+
+  deleteList: (id: string) => void
 }
 
 export const useListsStore = create<ListsStore>(set => ({
@@ -80,5 +82,17 @@ export const useListsStore = create<ListsStore>(set => ({
       const newList = { ...selectedList }
       newList.color = value
       return { selectedList: newList }
+    }),
+
+  deleteList: id =>
+    set(({ lists }) => {
+      if (lists === null) return {}
+      const newLists = [...lists]
+
+      const index = lists.findIndex(l => l.id === id)
+      if (index === -1) return {}
+
+      newLists.splice(index, 1)
+      return { lists: newLists }
     })
 }))

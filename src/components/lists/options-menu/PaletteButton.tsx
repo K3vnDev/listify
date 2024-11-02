@@ -1,3 +1,4 @@
+import { ListContext } from '@/app/mylists/[listId]/page'
 import { usePatch } from '@/hooks/usePatch'
 import { PaletteIcon } from '@/icons'
 import { useListsStore } from '@/store/lists/useListsStore'
@@ -12,6 +13,7 @@ interface Props {
 export const PaletteButton = ({ color }: Props) => {
   const { isShowing } = useContext(OptionsMenuContext)
   const setListColor = useListsStore(s => s.setListColor)
+  const { isBeingDeleted } = useContext(ListContext)
 
   const { trigger } = usePatch({
     prevValue: color,
@@ -33,7 +35,7 @@ export const PaletteButton = ({ color }: Props) => {
     <button
       className='button border relative'
       style={{ background: color, color: iconColor, borderColor: iconColor }}
-      disabled={!isShowing}
+      disabled={!isShowing || isBeingDeleted}
     >
       <PaletteIcon className='pointer-events-none' />
       <input
@@ -41,6 +43,7 @@ export const PaletteButton = ({ color }: Props) => {
         value={color}
         className='absolute size-full top-0 left-0 opacity-0 cursor-pointer'
         onChange={handleChange}
+        disabled={isBeingDeleted}
       />
     </button>
   )

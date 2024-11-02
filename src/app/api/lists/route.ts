@@ -6,7 +6,7 @@ import { cookies } from 'next/headers'
 import type { NextRequest } from 'next/server'
 
 // Get a single list
-export const GET = async (request: NextRequest) =>
+export const GET = (request: NextRequest) =>
   middleware.listId(request, async listId => {
     const supabase = createRouteHandlerClient({ cookies })
 
@@ -39,7 +39,7 @@ export const POST = async () => {
 }
 
 // Update list row (name or color column)
-export const PATCH = async (request: NextRequest) =>
+export const PATCH = (request: NextRequest) =>
   middleware.listId(request, async listId => {
     const { target, value } = (await request.json()) as RequestJSON
 
@@ -67,3 +67,18 @@ interface RequestJSON {
   target?: (typeof TARGETS)[number]
   value?: string
 }
+
+// Delete list // CHANGE ASYNC
+export const DELETE = (request: NextRequest) =>
+  middleware.listId(request, async listId => {
+    const supabase = createRouteHandlerClient({ cookies })
+
+    // biome-ignore format: <>
+    const {error, status} = await supabase
+      .from('lists')
+      .delete()
+      .eq('id', listId)
+
+    if (error) return Response(false, status)
+    return Response(true, 200)
+  })

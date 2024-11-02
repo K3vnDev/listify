@@ -21,5 +21,30 @@
       }
     }
     @apply size-[--btn-w] min-w-[--btn-w] transition-all;
+
+    &.pointer-pressing {
+      animation: shake .2s ease infinite both;
+    }
+  }
+}
+
+@keyframes going-up {
+  to {
+    height: 100%;
+  }
+}
+
+@keyframes going-down {
+  to {
+    height: 0%;
+  }
+}
+
+@keyframes shake {
+  from {
+    rotate: 1deg;
+  }
+  to {
+    rotate: -1deg;
   }
 }

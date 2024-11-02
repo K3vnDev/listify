@@ -8,10 +8,11 @@ import { useListsStore } from '@/store/lists/useListsStore'
 import type { List } from '@/types'
 import { dataFetch } from '@/utils/dataFetch'
 import { useParams } from 'next/navigation'
-import { createContext, useEffect } from 'react'
+import { createContext, useEffect, useState } from 'react'
 
 export default function ListView() {
   const { listId } = useParams()
+  const [isBeingDeleted, setIsBeingDeleted] = useState(false)
 
   const setSelectedList = useListsStore(s => s.setSelectedList)
   const selectedList = useListsStore(s => s.selectedList)
@@ -35,18 +36,29 @@ export default function ListView() {
   }, [])
 
   return (
-    <main
-      className='bg-[#ddd] flex flex-col w-full rounded-2xl py-6 px-4 border-t-8 gap-6'
-      style={{ borderColor: selectedList?.color ?? 'gray' }}
-    >
-      <header className='flex w-full max-w-full justify-between items-center gap-4'>
-        <Name name={selectedList?.name} />
-        <div className='flex items-center gap-3'>
-          <CreateTaskButton />
-          <OptionsMenu />
-        </div>
-      </header>
-      <TasksSection />
-    </main>
+    <ListContext.Provider value={{ isBeingDeleted, setIsBeingDeleted }}>
+      <main
+        className='bg-[#ddd] flex flex-col w-full rounded-2xl py-6 px-4 border-t-8 gap-6'
+        style={{ borderColor: selectedList?.color ?? 'gray' }}
+      >
+        <header className='flex w-full max-w-full justify-between items-center gap-4'>
+          <Name name={selectedList?.name} />
+          <div className='flex items-center gap-3'>
+            <CreateTaskButton />
+            <OptionsMenu />
+          </div>
+        </header>
+        <TasksSection />
+      </main>
+    </ListContext.Provider>
   )
 }
+
+interface Context {
+  isBeingDeleted: boolean
+  setIsBeingDeleted: React.Dispatch<React.SetStateAction<boolean>>
+}
+export const ListContext = createContext<Context>({
+  isBeingDeleted: false,
+  setIsBeingDeleted: () => {}
+})
