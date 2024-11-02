@@ -4,6 +4,7 @@ import { Name } from '@/components/lists/Name'
 import { OptionsMenu } from '@/components/lists/options-menu/OptionsMenu'
 import { CreateTaskButton } from '@/components/tasks/CreateTaskButton'
 import { TasksSection } from '@/components/tasks/TasksSection'
+import { useRefreshStateLists } from '@/hooks/useRefreshStateLists'
 import { useListsStore } from '@/store/lists/useListsStore'
 import type { List } from '@/types'
 import { dataFetch } from '@/utils/dataFetch'
@@ -17,6 +18,8 @@ export default function ListView() {
   const setSelectedList = useListsStore(s => s.setSelectedList)
   const selectedList = useListsStore(s => s.selectedList)
   const setRecentlySavedList = useListsStore(s => s.setRecentlySavedList)
+
+  useRefreshStateLists()
 
   const handleError = () => {
     // TODO: Handle errors
