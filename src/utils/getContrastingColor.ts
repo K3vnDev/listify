@@ -8,5 +8,5 @@ export const getContrastingColor = (hexColor: string) => {
 
   const [r, g, b] = modules
   const luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b
-  return luminance > 128 ? '#000000' : '#FFFFFF'
+  return luminance > 128 ? '#444' : '#FFFFFF'
 }

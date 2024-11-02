@@ -30,7 +30,7 @@ export const ItemListsSection = () => {
 
   const className = {
     list: 'flex flex-col gap-3',
-    grid: 'grid [grid-template-columns:repeat(auto-fit,_minmax(300px,_1fr))] grid-rows-5 gap-3 *:size-full *:h-20'
+    grid: 'grid [grid-template-columns:repeat(auto-fit,_minmax(270px,_1fr))] grid-rows-5 gap-3 *:size-full *:h-20'
   }
 
   return lists.length > 0 ? (

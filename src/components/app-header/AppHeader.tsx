@@ -13,7 +13,7 @@ export default async function AppHeader() {
   const { avatar_url } = user.user_metadata
 
   return (
-    <header className='flex justify-between'>
+    <header className='flex justify-between mt-8'>
       <AppNameAndLogo />
       <UserAvatar avatarUrl={avatar_url} />
     </header>

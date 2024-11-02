@@ -7,7 +7,7 @@ import { useParams, useRouter } from 'next/navigation'
 import { useContext, useEffect, useRef, useState } from 'react'
 import { OptionsMenuContext } from './OptionsMenu'
 
-const MAX_TIME = 1.5
+const MAX_TIME = 1.2
 const PERIOD = 0.15
 
 export const DeleteButton = () => {
@@ -64,7 +64,7 @@ export const DeleteButton = () => {
         options: { method: 'DELETE' },
         onSuccess: () => {
           if (typeof listId === 'string') deleteList(listId)
-          router.push('/')
+          router.push('/mylists')
         },
         onError: () => {
           setIsBeingDeleted(false)

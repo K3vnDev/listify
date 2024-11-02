@@ -8,7 +8,7 @@ import { useOnClickSelector } from '@/hooks/useOnClickSelector'
 import { useListsStore } from '@/store/lists/useListsStore'
 
 export const OptionsMenu = () => {
-  const [isShowing, setIsShowing] = useState(true)
+  const [isShowing, setIsShowing] = useState(false)
   const selectedList = useListsStore(s => s.selectedList)
 
   useOnClickSelector(
