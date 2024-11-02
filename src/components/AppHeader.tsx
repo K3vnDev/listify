@@ -1,7 +1,9 @@
-import { UserAvatar } from '@/components/app-header/UserAvatar'
+import { UserAvatar } from '@/components/UserAvatar'
+import { AppLogo } from '@components/AppLogo'
+import { AppName } from '@components/AppName'
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
-import { AppNameAndLogo } from './AppNameAndLogo'
+import Link from 'next/link'
 
 export default async function AppHeader() {
   const supabase = createServerComponentClient({ cookies })
@@ -14,7 +16,11 @@ export default async function AppHeader() {
 
   return (
     <header className='flex justify-between mt-8'>
-      <AppNameAndLogo />
+      <Link href='/mylists' className='flex items-center gap-4'>
+        <AppLogo />
+        <AppName />
+      </Link>
+
       <UserAvatar avatarUrl={avatar_url} />
     </header>
   )

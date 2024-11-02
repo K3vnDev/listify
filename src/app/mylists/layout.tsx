@@ -1,4 +1,4 @@
-import AppHeader from '@/components/app-header/AppHeader'
+import AppHeader from '@/components/AppHeader'
 
 interface Props {
   children: React.ReactNode
