@@ -42,7 +42,7 @@ export default function ListView() {
   return (
     <ListContext.Provider value={{ isBeingDeleted, setIsBeingDeleted }}>
       <main
-        className='bg-[#ddd] flex flex-col w-full rounded-2xl py-6 px-4 border-t-8 gap-6'
+        className='bg-[#ddd] flex flex-col w-full rounded-2xl py-6 px-4 border-t-8 gap-6 max-h-full overflow-hidden'
         style={{ borderColor: selectedList?.color ?? 'gray' }}
       >
         <header className='flex w-full max-w-full justify-between items-center gap-4'>

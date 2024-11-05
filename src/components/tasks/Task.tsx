@@ -6,15 +6,21 @@ import { DeleteTaskButton } from '@components/tasks/DeleteTaskButton'
 import { Text } from '@components/tasks/Text'
 
 export const Task = ({ id, text, done }: TaskType) => {
-  const { isEditing, elementRef, handleClick, styles: s } = useTask({ id, text, done })
+  const {
+    isEditing,
+    handleClick,
+    elementRef,
+    styles: { outline, background }
+  } = useTask({ id, text, done })
 
   return (
     <li
       onClick={handleClick}
       className={`
-        task flex items-center justify-between pr-3 bg-[#cfcfcf] 
-        ${s.background} hover:brightness-[102%] rounded-lg gap-4 ${s.outline} cursor-pointer
+        task flex items-center justify-between pr-3 hover:brightness-[102%] 
+        rounded-lg gap-4 ${outline} cursor-pointer
       `}
+      style={{ background }}
       ref={elementRef}
     >
       <TaskContext.Provider value={{ taskId: id, isEditing, text, done, elementRef }}>

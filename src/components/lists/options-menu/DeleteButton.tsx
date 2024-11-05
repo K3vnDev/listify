@@ -7,7 +7,7 @@ import { dataFetch } from '@/utils/dataFetch'
 import { useParams, useRouter } from 'next/navigation'
 import { useContext, useEffect, useRef, useState } from 'react'
 
-const MAX_TIME = 1.2
+const MAX_TIME = 1
 const PERIOD = 0.15
 
 export const DeleteButton = () => {
@@ -27,7 +27,7 @@ export const DeleteButton = () => {
 
   const stopInterval = () => clearInterval(interval.current)
 
-  const onPointerDown = () => {
+  const startDelete = () => {
     if (isBeingDeleted) return
 
     const [time, add] = [PERIOD * 1000, (100 / MAX_TIME) * PERIOD]
@@ -45,7 +45,7 @@ export const DeleteButton = () => {
     }, time)
   }
 
-  const onPointerUp = () => {
+  const cancelDelete = () => {
     if (isBeingDeleted) return
 
     setSliderValues({ height: `${deletePercentage}%`, animation: goingDownAnimation })
@@ -81,15 +81,17 @@ export const DeleteButton = () => {
 
   return (
     <button
-      {...{ onPointerDown, onPointerUp }}
+      onPointerDown={startDelete}
+      onPointerUp={cancelDelete}
+      onPointerLeave={cancelDelete}
       className={`bg-zinc-700 button relative overflow-hidden ${className}`}
       disabled={!isShowing || isBeingDeleted}
     >
       {
         // biome-ignore format: <>
         isBeingDeleted 
-          ? <LoadingIcon className='z-20 animate-spin'/>
-          : <TrashIcon className='z-20' />
+          ? <LoadingIcon className='z-20 animate-spin pointer-events-none'/>
+          : <TrashIcon className='z-20 pointer-events-none' />
       }
 
       <div

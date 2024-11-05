@@ -35,7 +35,7 @@ export const TasksSection = () => {
     )
 
   return (
-    <ul className='flex flex-col gap-2'>
+    <ul className='flex flex-col gap-2 h-full overflow-y-scroll overflow-x-hidden'>
       {tasks.map(task => (
         <Task key={task.id} {...task} />
       ))}

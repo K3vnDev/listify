@@ -46,7 +46,7 @@ export const useTask = ({ id, text, done }: Task) => {
   }
 
   const styles = {
-    background: done && !isEditing ? 'bg-[#c0c0c0]' : 'bg-[#cfcfcf]',
+    background: done && !isEditing ? '#c0c0c0' : '#cfcfcf',
     outline: isEditing ? 'border-editing' : ''
   }
 

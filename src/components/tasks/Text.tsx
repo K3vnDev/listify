@@ -65,7 +65,7 @@ export const Text = ({ value }: Props) => {
     <span
       className={`
         w-full text-black my-4 pl-3 cursor-pointer leading-[1.375rem] 
-        min-h-[1.375rem] text-pretty ${lineThrough}
+        min-h-[1.375rem] text-pretty ${lineThrough} select-none
       `}
     >
       {value}

@@ -14,7 +14,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body className='px-6 flex flex-col gap-11 max-w-5xl mx-auto min-h-screen'>
+      <body className='px-6 py-8 flex flex-col gap-10 max-w-5xl mx-auto w-screen max-h-dvh h-dvh overflow-hidden'>
         {children}
         <AppBackground />
       </body>

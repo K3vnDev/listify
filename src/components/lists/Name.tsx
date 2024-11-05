@@ -3,6 +3,7 @@ import { useOnClickSelector } from '@/hooks/useOnClickSelector'
 import { usePatch } from '@/hooks/usePatch'
 import { PencilIcon } from '@/icons'
 import { useListsStore } from '@/store/lists/useListsStore'
+import { getElementRef } from '@/utils/getElementRef'
 import { useEffect, useRef, useState } from 'react'
 
 interface Props {
@@ -37,6 +38,11 @@ export const Name = ({ name }: Props) => {
     if (name?.trim() === '' && !isEditing) {
       setListName(DEFAULT_LIST_NAME)
       trigger(DEFAULT_LIST_NAME)
+      return
+    }
+
+    if (name === DEFAULT_LIST_NAME && isEditing) {
+      getElementRef<HTMLInputElement>(inputRef).setSelectionRange(0, name.length)
     }
   }, [isEditing])
 
@@ -44,6 +50,14 @@ export const Name = ({ name }: Props) => {
     const { value } = e.target
     setListName(value)
     if (value.trim() !== '') trigger(value)
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const { key, shiftKey } = e
+    if (key === 'Enter' && !shiftKey) {
+      e.preventDefault()
+      setIsediting(false)
+    }
   }
 
   if (name === undefined) return <span className='h-7 rounded-md w-1/3 bg-zinc-500/30' />
@@ -59,6 +73,7 @@ export const Name = ({ name }: Props) => {
         <input
           value={name}
           onChange={handleChange}
+          onKeyDown={handleKeyDown}
           className='border-editing outline-none text-2xl rounded-md bg-zinc-100 size-full [field-sizing:content] px-1'
           ref={inputRef}
         />
